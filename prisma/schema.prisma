@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id            String      @id @unique @default(cuid())
+  email         String      @unique
+  password      String
+  name          String
+  avatarUrl     String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt @default(now())
+  projects      Project[]
+  leadProjects  Project[] @relation("ProjectLeader")
+  invites       ProjectInvite[] 
+  tasks         Task[]
+  taskComments  TaskComment[]
+  posts         Post[]
+  postComments  PostComment[]
+}
+
+model Project {
+  id          String    @id @unique @default(cuid())
+  name        String
+  description String    @default("")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @default(now())
+  leader      User      @relation("ProjectLeader", fields: [leaderId], references: [id])
+  leaderId    String
+  posts       Post[]
+  members     User[]
+  tasks       Task[]
+  resources   Resource[]
+  invites     ProjectInvite[]
+
+  @@index([leaderId])
+}
+
+model ProjectInvite {
+  id        String   @id @unique @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+
+  @@index([userId])
+  @@index([projectId])
+}
+
+model Resource {
+  id          String   @id @unique @default(cuid())
+  name        String
+  description String  @default("")
+  url         String
+  icon        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt @default(now())
+  project     Project  @relation(fields: [projectId], references: [id])
+  projectId   String
+
+  @@index([projectId])
+}
+
+enum TaskStatus {
+  TODO
+  INPROGRESS
+  REVIEW
+  COMPLETED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+model Task {
+  id          String       @id @unique @default(cuid())
+  name        String
+  description String       @default("")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt @default(now())
+  project     Project      @relation(fields: [projectId], references: [id])
+  projectId   String
+  startDate   DateTime?    @default(now())
+  endDate     DateTime?    @default(now())
+  status      TaskStatus   @default(TODO)
+  priority    TaskPriority @default(LOW)
+  comments    TaskComment[]
+  assignees   User[]
+  todos       Json         @default("[]") 
+
+  @@index([projectId])
+}
+
+
+model TaskComment {
+  id        String   @id @unique @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  content   String
+
+  @@index([userId])
+  @@index([taskId])
+}
+
+
+model Post {
+  id        String   @id @unique @default(cuid())
+  title     String   @db.VarChar(500)
+  content   String   @db.VarChar(10000)
+  tags      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+  postComments PostComment[] 
+
+  @@index([authorId])
+  @@index([projectId])
+}
+
+model PostComment {
+  id                String         @id @unique @default(cuid())
+  authorId            String
+  author            User           @relation(fields: [authorId], references: [id])
+  postId            String
+  post              Post           @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parentCommentId   String?
+  parentComment     PostComment?   @relation("PostCommentChildren", fields: [parentCommentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  childrenComments  PostComment[]  @relation("PostCommentChildren")
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt @default(now())
+  content           String
+
+  @@index([parentCommentId])
+  @@index([postId])
+  @@index([authorId])
+}
