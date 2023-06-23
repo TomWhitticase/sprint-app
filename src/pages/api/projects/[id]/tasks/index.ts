@@ -12,11 +12,6 @@ const getTasks = async (
   res: NextApiResponse,
   session: Session | null
 ) => {
-  // Ensure session exists
-  if (!session || !session.user) {
-    return res.status(401).json({ message: "Unauthorized, no active session" });
-  }
-
   const projectId = req.query.id as string;
 
   const tasks = await prisma.task.findMany({
@@ -44,11 +39,6 @@ const createTask = async (
   res: NextApiResponse,
   session: Session | null
 ) => {
-  // Ensure session exists
-  if (!session || !session.user) {
-    return res.status(401).json({ message: "Unauthorized, no active session" });
-  }
-
   const {
     name,
     description,
