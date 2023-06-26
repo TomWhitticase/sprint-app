@@ -15,8 +15,13 @@ type ProjectPageProps = {
 };
 
 export default function ProjectPage({ id }: ProjectPageProps) {
-  const { project, projectIsLoading, deleteProject, removeUserFromProject } =
-    useProject(id);
+  const {
+    project,
+    projectIsLoading,
+    deleteProject,
+    removeUserFromProject,
+    updateProject,
+  } = useProject(id);
   const [projectName, setProjectName] = useState(project?.name || "");
   const [projectDescription, setProjectDescription] = useState(
     project?.description || ""
@@ -80,7 +85,19 @@ export default function ProjectPage({ id }: ProjectPageProps) {
           <span className="flex items-center justify-center h-8 gap-4">
             <h1 className="text-xl font-bold">Project Name</h1>
             {projectName !== project?.name && (
-              <Button variant="black">Save Changes</Button>
+              <Button
+                onClick={() => {
+                  if (projectName !== project?.name) {
+                    updateProject({
+                      projectId: id,
+                      name: projectName,
+                    });
+                  }
+                }}
+                variant="black"
+              >
+                Save Changes
+              </Button>
             )}
           </span>
           <div className="flex w-full gap-4">
@@ -93,7 +110,19 @@ export default function ProjectPage({ id }: ProjectPageProps) {
           <span className="flex items-center justify-center h-8 gap-4">
             <h1 className="text-xl font-bold">Project Description</h1>
             {projectDescription !== project?.description && (
-              <Button variant="black">Save Changes</Button>
+              <Button
+                onClick={() => {
+                  if (projectDescription !== project?.description) {
+                    updateProject({
+                      projectId: id,
+                      description: projectDescription,
+                    });
+                  }
+                }}
+                variant="black"
+              >
+                Save Changes
+              </Button>
             )}
           </span>
           <div className="flex w-full gap-4">

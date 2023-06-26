@@ -92,7 +92,18 @@ const getTask = async (
           avatarUrl: true,
         },
       },
-      comments: true,
+      comments: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              avatarUrl: true,
+            },
+          },
+        },
+      },
     },
   });
   if (!task) {

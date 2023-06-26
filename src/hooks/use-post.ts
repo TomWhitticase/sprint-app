@@ -23,9 +23,35 @@ async function createPostCommentRequest(
   );
   return data;
 }
-
+//delete post comment
 async function deletePostCommentRequest(commentId: string) {
   const { data } = await axios.delete(`/api/posts/comments/${commentId}`);
+  return data;
+}
+
+//update post
+export interface UpdatePostInput {
+  title?: string;
+  content?: string;
+  tags?: string;
+}
+async function updatePostRequest({
+  postId,
+  title,
+  content,
+  tags,
+}: UpdatePostInput & { postId: string }) {
+  const { data } = await axios.put(
+    `/api/posts/${postId}`,
+    {
+      title,
+      content,
+      tags,
+    },
+    {
+      withCredentials: true,
+    }
+  );
   return data;
 }
 
@@ -52,10 +78,29 @@ export function usePost(postId: string) {
     },
   });
 
+  const updatePostMutation = useMutation(
+    (postDetails: UpdatePostInput) =>
+      updatePostRequest({
+        ...postDetails,
+        postId,
+      }),
+    {
+      onSuccess: (data) => {
+        // update the cache with the new post
+        //MUST TEST THIS!!!
+        queryClient.setQueryData([postId], (oldData: any) => ({
+          ...oldData,
+          ...data,
+        }));
+      },
+    }
+  );
+
   return {
     post,
     postIsLoading,
     postError,
+    updatePost: updatePostMutation.mutateAsync,
     deletePostComment: deletePostCommentMutation.mutateAsync,
     createPostComment: createPostCommentMutation.mutateAsync,
   };

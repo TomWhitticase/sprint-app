@@ -28,6 +28,29 @@ async function removeUserFromProjectRequest({
   return data;
 }
 
+//Update project details
+async function updateProjectRequest({
+  projectId,
+  name,
+  description,
+}: {
+  projectId: string;
+  name?: string;
+  description?: string;
+}) {
+  const { data } = await axios.put(
+    `/api/projects/${projectId}`,
+    {
+      name,
+      description,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+  return data;
+}
+
 export function useProject(id: string) {
   const queryClient = useQueryClient();
 
@@ -54,11 +77,19 @@ export function useProject(id: string) {
     }
   );
 
+  const updateProjectMutation = useMutation(updateProjectRequest, {
+    onSuccess: (data) => {
+      // invalidate the project query after updating
+      queryClient.invalidateQueries(["project", id]);
+    },
+  });
+
   return {
     project,
     projectIsLoading,
     projectError,
     deleteProject: deleteProjectMutation.mutateAsync,
     removeUserFromProject: removeUserFromProjectMutation.mutateAsync,
+    updateProject: updateProjectMutation.mutateAsync,
   };
 }

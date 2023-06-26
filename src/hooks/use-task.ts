@@ -40,7 +40,7 @@ export function useTask(taskId?: string) {
   const taskQuery = useQuery<
     Task & {
       assignees: User[];
-      comments: TaskComment[];
+      comments: (TaskComment & { user: User })[];
     },
     Error
   >(["task", taskId], () => getTask(taskId!), {

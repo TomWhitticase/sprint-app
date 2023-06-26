@@ -18,6 +18,7 @@ import { TaskPriority, TaskStatus } from "@prisma/client";
 import SelectUsers from "@/components/users/select-users";
 import TodoList from "@/components/tasks/todo-list";
 import { useRouter } from "next/router";
+import UserAvatar from "@/components/users/user-avatar";
 
 interface TaskPageProps {
   id: string;
@@ -372,6 +373,33 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
               </Button>
             </div>
           </div>
+        </div>
+        <div className="bg-white rounded-lg border-2 p-4 flex flex-col items-start justify-start">
+          <h1
+            className="
+                    text-xl font-bold
+            "
+          >
+            Comments
+          </h1>
+          {task?.comments.map((c) => (
+            <div className="flex flex-col items-start justify-start" key={c.id}>
+              <div className="flex items-center justify-start gap-4">
+                <UserAvatar user={c.user} />
+                <p className="font-bold">{c.user.name}</p>
+                <p className="text-slate-400">
+                  {new Date(c.createdAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                  })}
+                </p>
+              </div>
+              <div>{c.content}</div>
+            </div>
+          ))}
         </div>
       </main>
     </>

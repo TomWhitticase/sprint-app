@@ -13,6 +13,36 @@ async function deleteResourceRequest(resourceId: string) {
   return data;
 }
 
+export interface UpdateResourceInput {
+  resourceId: string;
+  name?: string;
+  description?: string;
+  url?: string;
+  icon?: string;
+}
+//Update resource details
+async function updateResourceRequest({
+  resourceId,
+  name,
+  description,
+  url,
+  icon,
+}: UpdateResourceInput) {
+  const { data } = await axios.put(
+    `/api/resources/${resourceId}`,
+    {
+      name,
+      description,
+      url,
+      icon,
+    },
+    {
+      withCredentials: true,
+    }
+  );
+  return data;
+}
+
 // Create Resource
 export interface CreateResourceInput {
   name: string;
@@ -55,20 +85,25 @@ export function useResources(projectId: string) {
     }
   );
 
-  const deleteResourceMutation = useMutation(
-    (resourceId: string) => deleteResourceRequest(resourceId),
-    {
-      onSuccess: () => {
-        // invalidate and refetch the resources
-        queryClient.invalidateQueries(["resources", projectId]);
-      },
-    }
-  );
+  const deleteResourceMutation = useMutation(deleteResourceRequest, {
+    onSuccess: () => {
+      // invalidate and refetch the resources
+      queryClient.invalidateQueries(["resources", projectId]);
+    },
+  });
+
+  const updateResourceMutation = useMutation(updateResourceRequest, {
+    onSuccess: () => {
+      // invalidate and refetch the resources
+      queryClient.invalidateQueries(["resources", projectId]);
+    },
+  });
 
   return {
     resources,
     resourcesIsLoading,
     resourcesError,
+    updateResource: updateResourceMutation.mutateAsync,
     createResource: createResourceMutation.mutateAsync,
     deleteResource: deleteResourceMutation.mutateAsync,
   };

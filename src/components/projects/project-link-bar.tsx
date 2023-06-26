@@ -16,7 +16,7 @@ export default function ProjectLinkBar({
     <div className="relative flex items-center justify-start gap-2 p-4 text-lg border-b-2 mobile-only:hidden bg-slate-100">
       <span className="flex items-center justify-start gap-2 text-slate-400">
         <button
-          className="transition-all duration-300 ease-in-out hover:text-system-blue-light"
+          className="transition-all duration-300 ease-in-out hover:text-orange-500"
           onClick={() => router.push("/dashboard")}
         >
           <Image

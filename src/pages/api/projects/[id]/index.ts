@@ -3,8 +3,9 @@ import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session } from "next-auth";
 
-//DELETE api/projects/{id}
-//GET api/projects/{id}
+//DELETE api/projects/{id} - delete a project
+//GET api/projects/{id} - get a single project
+//PUT api/projects/{id} - update a project's attributes [TODO SWAGGER]
 
 /**
  * @swagger
@@ -169,7 +170,112 @@ const deleteProject = async (
   }
 };
 
+const updateProject = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  session: Session | null
+) => {
+  const id = req.query.id as string;
+  const { name, description } = req.body;
+
+  if (!id) {
+    return res.status(400).json({
+      message: "Project ID is required",
+    });
+  }
+  //check project exists
+  const project = await prisma.project.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      leader: {
+        select: {
+          id: true,
+        },
+      },
+      members: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+  if (!project) {
+    return res.status(404).json({
+      message: "Project not found",
+    });
+  }
+
+  //check if user is member or leader of project
+  const user = session!.user;
+  const isMember = project.members.some((member) => member.id === user.id);
+  const isLeader = project.leader.id === user.id;
+  if (!isMember && !isLeader) {
+    return res.status(403).json({
+      message: "You are not authorized to update this project",
+    });
+  }
+
+  //update the project with given data
+  try {
+    const updatedProject = await prisma.project.update({
+      where: {
+        id,
+      },
+      data: {
+        name: name ? name : project.name,
+        description: description ? description : project.description,
+      },
+      include: {
+        leader: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatarUrl: true,
+          },
+        },
+        members: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatarUrl: true,
+          },
+        },
+      },
+    });
+
+    return res.status(200).json(updatedProject);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Error updating project",
+    });
+  }
+};
+
 export default apiHandler({
   DELETE: { handler: deleteProject },
   GET: { handler: getProject },
+  PUT: { handler: updateProject },
 });
+
+//for reference
+// model Project {
+//   id          String    @id @unique @default(cuid())
+//   name        String
+//   description String    @default("")
+//   createdAt   DateTime  @default(now())
+//   updatedAt   DateTime  @updatedAt @default(now())
+//   leader      User      @relation("ProjectLeader", fields: [leaderId], references: [id])
+//   leaderId    String
+//   posts       Post[]
+//   members     User[]
+//   tasks       Task[]
+//   resources   Resource[]
+//   invites     ProjectInvite[]
+
+//   @@index([leaderId])
+// }
