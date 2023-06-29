@@ -56,7 +56,7 @@ const LoginCard = (props: LoginCardProps) => {
                   name="email"
                   id="email"
                   className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
-                  placeholder="name@company.com"
+                  placeholder="Enter your email address"
                   required
                   value={props.email}
                   onChange={(e) => {
@@ -75,7 +75,7 @@ const LoginCard = (props: LoginCardProps) => {
                   type="password"
                   name="password"
                   id="password"
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
                   required
                   value={props.password}
@@ -94,7 +94,7 @@ const LoginCard = (props: LoginCardProps) => {
               </Button>
               <p className="text-red-500">{props.error}</p>
             </form>
-            <div className="flex items-center gap-2 justify-center">
+            <div className="flex items-center justify-center gap-2">
               <span className="text-sm text-white">
                 Don&apos;t have an account?
               </span>

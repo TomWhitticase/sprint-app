@@ -11,27 +11,33 @@ export async function sendEmail({
   subject,
   body,
 }: SendEmailParams): Promise<void> {
-  const transporter = nodemailer.createTransport({
-    service: "hotmail",
-    auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD,
-    },
-  });
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "hotmail",
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
 
-  // Verify connection configuration
-  await transporter.verify();
+    // Verify connection configuration
+    await transporter.verify();
 
-  const mailData = {
-    from: process.env.EMAIL_USERNAME,
-    to: recipientEmail,
-    subject: subject,
-    text: body,
-    html: `<div>${body}</div>`,
-  };
+    const mailData = {
+      from: process.env.EMAIL_USERNAME,
+      to: recipientEmail,
+      subject: subject,
+      text: body,
+      html: `<div>${body}</div>`,
+    };
 
-  // Send mail
-  await transporter.sendMail(mailData);
+    // Send mail
+    await transporter.sendMail(mailData);
+    return Promise.resolve();
+  } catch (error) {
+    console.log(error);
+    return Promise.reject();
+  }
 }
 
 export default sendEmail;

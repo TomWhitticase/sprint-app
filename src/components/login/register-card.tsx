@@ -3,6 +3,9 @@ import ReactLoading from "react-loading";
 import { Button } from "@chakra-ui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import axios from "axios";
+import isValidPassword from "@/lib/is-valid-password";
+import { set } from "nprogress";
 
 const RegisterCard = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,11 +18,55 @@ const RegisterCard = () => {
     confirmPassword: "",
   });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setIsLoading(true);
+  const [successfulRegistration, setSuccessfulRegistration] = useState(false);
 
-    setIsLoading(false);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    if (formValues.password !== formValues.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    const passwordValidation = isValidPassword(formValues.password);
+    if (passwordValidation.isValid === false) {
+      setError(passwordValidation.message);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await axios.post("/api/register", {
+        email: formValues.email,
+        name: formValues.name,
+        password: formValues.password,
+      });
+      setSuccessfulRegistration(true);
+      setIsLoading(false);
+    } catch (err: any) {
+      console.log(err.response.data.message);
+      setError(err.response.data.message);
+      setIsLoading(false);
+    }
   };
+
+  if (successfulRegistration) {
+    return (
+      <section className="flex flex-col items-center justify-center w-full h-full gap-4 p-4">
+        <h1 className="text-3xl font-bold text-orange-500">
+          Registration successful!
+        </h1>
+
+        <p className="max-w-lg p-2">
+          An activation link has been sent to your email address. Please check
+          your inbox. You will not be able to login until you have clicked the
+          activation link and activated your account.
+        </p>
+        <Button variant="black" onClick={() => router.push("/login")}>
+          Login
+        </Button>
+      </section>
+    );
+  }
 
   return (
     <section className="w-full h-full">
@@ -57,7 +104,7 @@ const RegisterCard = () => {
                   name="email"
                   id="email"
                   className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
-                  placeholder="name@company.com"
+                  placeholder="Enter your email address"
                   required
                   value={formValues.email}
                   onChange={(e) => {
@@ -76,11 +123,11 @@ const RegisterCard = () => {
                   Display name
                 </label>
                 <input
-                  type="name"
+                  type="text"
                   name="name"
                   id="name"
                   className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
-                  placeholder="John Doe"
+                  placeholder="Enter your name"
                   required
                   value={formValues.name}
                   onChange={(e) => {
@@ -91,63 +138,65 @@ const RegisterCard = () => {
                   }}
                 />
               </div>
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-white"
-                >
-                  Password
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="••••••••"
-                  className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
-                  required
-                  value={formValues.password}
-                  onChange={(e) => {
-                    setFormValues({
-                      ...formValues,
-                      password: e.target.value,
-                    });
-                  }}
-                />
+              <div className="flex flex-col gap-4">
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block mb-2 text-sm font-medium text-white"
+                  >
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
+                    required
+                    value={formValues.password}
+                    onChange={(e) => {
+                      setFormValues({
+                        ...formValues,
+                        password: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div>
+                  <input
+                    type="password"
+                    name="confirmpassword"
+                    id="confirmpassword"
+                    placeholder="Confirm your password"
+                    className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
+                    required
+                    value={formValues.confirmPassword}
+                    onChange={(e) => {
+                      setFormValues({
+                        ...formValues,
+                        confirmPassword: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
               </div>
-              <div>
-                <label
-                  htmlFor="confirmpassword"
-                  className="block mb-2 text-sm font-medium text-white"
+              <div className="flex flex-col gap-1">
+                <Button
+                  type="submit"
+                  colorScheme="orange"
+                  className="w-full"
+                  isLoading={isLoading}
                 >
-                  Confirm your Password
-                </label>
-                <input
-                  type="password"
-                  name="confirmpassword"
-                  id="confirmpassword"
-                  placeholder="••••••••"
-                  className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
-                  required
-                  value={formValues.password}
-                  onChange={(e) => {
-                    setFormValues({
-                      ...formValues,
-                      confirmPassword: e.target.value,
-                    });
-                  }}
-                />
+                  {isLoading ? (
+                    <ReactLoading width={8} height={8} />
+                  ) : (
+                    "Register"
+                  )}
+                </Button>
+                <p className="text-red-500">{error}</p>
               </div>
-              <Button
-                type="submit"
-                colorScheme="orange"
-                className="w-full"
-                isLoading={isLoading}
-              >
-                {isLoading ? <ReactLoading width={8} height={8} /> : "Register"}
-              </Button>
-              <p className="text-red-500">{error}</p>
             </form>
-            <div className="flex items-center gap-2 justify-center">
+            <div className="flex items-center justify-center gap-2">
               <span className="text-sm text-white">
                 Already have an account?
               </span>

@@ -159,5 +159,5 @@ model registrationData {
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  confirmationToken String
+  confirmationToken String   @unique
 }
