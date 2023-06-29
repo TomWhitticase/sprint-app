@@ -7,7 +7,7 @@ import { IconButton } from "@chakra-ui/react";
 import { FaBars } from "react-icons/fa";
 import { CgClose } from "react-icons/cg";
 
-const pagesWithoutSidebar = ["/login"];
+const pagesWithoutSidebar = ["/login", "/register"];
 
 export interface layoutProps {
   children: React.ReactNode;
@@ -25,7 +25,11 @@ export default function Layout(props: layoutProps) {
     );
   }
 
-  if (status === "unauthenticated" && router.pathname !== "/login") {
+  if (
+    status === "unauthenticated" &&
+    router.pathname !== "/login" &&
+    router.pathname !== "/register"
+  ) {
     router.push("/login");
     return null;
   }

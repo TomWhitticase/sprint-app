@@ -4,22 +4,23 @@ import { Button } from "@chakra-ui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-type LoginCardProps = {
-  email: string;
-  password: string;
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
-  setPassword: React.Dispatch<React.SetStateAction<string>>;
-  formSubmission: any;
-  error: string;
-};
-const LoginCard = (props: LoginCardProps) => {
+const RegisterCard = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
+  const [formValues, setFormValues] = useState({
+    email: "",
+    name: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsLoading(true);
-    await props.formSubmission(e);
+
     setIsLoading(false);
   };
+
   return (
     <section className="w-full h-full">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -37,7 +38,7 @@ const LoginCard = (props: LoginCardProps) => {
               <span className="text-2xl font-bold text-white">Sprint</span>
             </div>
             <h1 className="text-2xl font-bold leading-tight tracking-tight text-white md:text-3xl ">
-              Sign in to your account
+              Create your account
             </h1>
             <form
               className="space-y-4 md:space-y-6"
@@ -49,7 +50,7 @@ const LoginCard = (props: LoginCardProps) => {
                   htmlFor="email"
                   className="block mb-2 text-sm font-medium text-white"
                 >
-                  Your email
+                  Email address
                 </label>
                 <input
                   type="email"
@@ -58,9 +59,35 @@ const LoginCard = (props: LoginCardProps) => {
                   className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
                   placeholder="name@company.com"
                   required
-                  value={props.email}
+                  value={formValues.email}
                   onChange={(e) => {
-                    props.setEmail(e.target.value);
+                    setFormValues({
+                      ...formValues,
+                      email: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block mb-2 text-sm font-medium text-white"
+                >
+                  Display name
+                </label>
+                <input
+                  type="name"
+                  name="name"
+                  id="name"
+                  className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
+                  placeholder="John Doe"
+                  required
+                  value={formValues.name}
+                  onChange={(e) => {
+                    setFormValues({
+                      ...formValues,
+                      name: e.target.value,
+                    });
                   }}
                 />
               </div>
@@ -78,9 +105,35 @@ const LoginCard = (props: LoginCardProps) => {
                   placeholder="••••••••"
                   className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
                   required
-                  value={props.password}
+                  value={formValues.password}
                   onChange={(e) => {
-                    props.setPassword(e.target.value);
+                    setFormValues({
+                      ...formValues,
+                      password: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="confirmpassword"
+                  className="block mb-2 text-sm font-medium text-white"
+                >
+                  Confirm your Password
+                </label>
+                <input
+                  type="password"
+                  name="confirmpassword"
+                  id="confirmpassword"
+                  placeholder="••••••••"
+                  className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
+                  required
+                  value={formValues.password}
+                  onChange={(e) => {
+                    setFormValues({
+                      ...formValues,
+                      confirmPassword: e.target.value,
+                    });
                   }}
                 />
               </div>
@@ -90,21 +143,21 @@ const LoginCard = (props: LoginCardProps) => {
                 className="w-full"
                 isLoading={isLoading}
               >
-                {isLoading ? <ReactLoading width={8} height={8} /> : "Sign in"}
+                {isLoading ? <ReactLoading width={8} height={8} /> : "Register"}
               </Button>
-              <p className="text-red-500">{props.error}</p>
+              <p className="text-red-500">{error}</p>
             </form>
             <div className="flex items-center gap-2 justify-center">
               <span className="text-sm text-white">
-                Don&apos;t have an account?
+                Already have an account?
               </span>
               <button
                 onClick={() => {
-                  router.push("/register");
+                  router.push("/login");
                 }}
                 className="text-sm font-bold text-white hover:underline"
               >
-                Register
+                Sign in
               </button>
             </div>
           </div>
@@ -114,4 +167,4 @@ const LoginCard = (props: LoginCardProps) => {
   );
 };
 
-export default LoginCard;
+export default RegisterCard;
