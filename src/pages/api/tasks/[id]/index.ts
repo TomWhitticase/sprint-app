@@ -18,6 +18,11 @@ const deleteTask = async (
     include: {
       project: {
         include: {
+          leader: {
+            select: {
+              id: true,
+            },
+          },
           members: {
             select: {
               id: true,
@@ -34,9 +39,9 @@ const deleteTask = async (
   }
 
   //ensure the user is a member of the tasks project
-  const isMember = task.project.members.some(
-    (member) => member.id === session?.user?.id
-  );
+  const isMember =
+    task.project.members.some((member) => member.id === session?.user?.id) ||
+    task.project.leader.id === session?.user?.id;
   if (!isMember) {
     res.status(403).json({ message: "You are not a member of this project" });
     return;
@@ -71,6 +76,12 @@ const updateTask = async (
     include: {
       project: {
         include: {
+          leader: {
+            select: {
+              id: true,
+            },
+          },
+
           members: {
             select: {
               id: true,
@@ -87,9 +98,9 @@ const updateTask = async (
     return;
   }
   //ensure the user is a member of the tasks project
-  const isMember = task.project.members.some(
-    (member) => member.id === session?.user?.id
-  );
+  const isMember =
+    task.project.members.some((member) => member.id === session?.user?.id) ||
+    task.project.leader.id === session?.user?.id;
   if (!isMember) {
     res.status(403).json({ message: "You are not a member of this project" });
     return;

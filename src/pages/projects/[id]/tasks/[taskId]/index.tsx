@@ -498,7 +498,7 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
           <div className="flex flex-col w-full">
             {task?.comments.map((c) => (
               <div
-                className="flex items-start justify-start w-full gap-2 p-4"
+                className="flex items-start justify-start w-full gap-2 p-2"
                 key={c.id}
               >
                 <div>
