@@ -6,9 +6,9 @@ export interface DeadlineBadgeProps {
 }
 export default function DeadlineBadge(props: DeadlineBadgeProps) {
   return (
-    <span className="flex items-center justify-start gap-2 px-2 py-1 text-orange-800 bg-orange-100 rounded ">
+    <span className="flex items-center justify-start gap-1 px-2 py-1 text-orange-800 bg-orange-100 rounded ">
       <CgSandClock />
-      Deadline {new Date(props.deadline).toLocaleDateString("en-US")}
+      {new Date(props.deadline).toLocaleDateString("en-US")}
     </span>
   );
 }

@@ -16,6 +16,27 @@ async function deleteTask(taskId: string) {
   return data;
 }
 
+async function createTaskComment(taskId: string, content: string) {
+  const { data } = await axios.post(
+    `/api/tasks/${taskId}/comments`,
+    { content },
+    {
+      withCredentials: true,
+    }
+  );
+  return data;
+}
+
+async function deleteTaskComment(taskId: string, commentId: string) {
+  const { data } = await axios.delete(
+    `/api/tasks/${taskId}/comments/${commentId}`,
+    {
+      withCredentials: true,
+    }
+  );
+  return data;
+}
+
 export interface UpdateTaskInputs {
   name?: string;
   description?: string;
@@ -53,6 +74,24 @@ export function useTask(taskId?: string) {
     },
   });
 
+  const createTaskCommentMutation = useMutation(
+    (content: string) => createTaskComment(taskId!, content),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["task", taskId]);
+      },
+    }
+  );
+
+  const deleteTaskCommentMutation = useMutation(
+    (commentId: string) => deleteTaskComment(taskId!, commentId),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["task", taskId]);
+      },
+    }
+  );
+
   const updateTaskMutation = useMutation(
     (updatedData: UpdateTaskInputs) => updateTask(taskId!, updatedData),
     {
@@ -70,5 +109,9 @@ export function useTask(taskId?: string) {
     deleteTaskIsLoading: deleteTaskMutation.isLoading,
     updateTask: updateTaskMutation.mutateAsync,
     updateTaskIsLoading: updateTaskMutation.isLoading,
+    createTaskComment: createTaskCommentMutation.mutateAsync,
+    createTaskCommentIsLoading: createTaskCommentMutation.isLoading,
+    deleteTaskComment: deleteTaskCommentMutation.mutateAsync,
+    deleteTaskCommentIsLoading: deleteTaskCommentMutation.isLoading,
   };
 }

@@ -110,7 +110,13 @@ export default function Comment(props: CommentProps) {
                 </button>
                 {props.author.id === session?.user.id && (
                   <button
-                    onClick={handleDeleteComment}
+                    onClick={() => {
+                      if (
+                        confirm("Are you sure you want to delete this comment?")
+                      ) {
+                        handleDeleteComment();
+                      }
+                    }}
                     className="flex items-center justify-center gap-2 px-2 py-1 text-sm font-bold transition-all duration-300 ease-in-out rounded bg-slate-200 hover:text-orange-500 text-slate-500"
                   >
                     <FaTrash /> Delete

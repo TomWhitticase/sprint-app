@@ -36,7 +36,9 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse) => {
   //check that password is strong enough, if not, return error
   if (!isValidPassword(password).isValid) {
     console.log("password not valid");
-    return res.status(400).json({ message: isValidPassword(password).message });
+    return res.status(400).json({
+      message: isValidPassword(password).conditions,
+    });
   }
 
   //check if there is an existing registration record for this email, if there is, delete it

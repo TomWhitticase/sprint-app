@@ -15,11 +15,33 @@ const deleteTask = async (
   const { id } = req.query;
   const task = await prisma.task.findUnique({
     where: { id: id as string },
+    include: {
+      project: {
+        include: {
+          members: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
+    },
   });
+
   if (!task) {
     res.status(404).json({ message: "Task not found" });
     return;
   }
+
+  //ensure the user is a member of the tasks project
+  const isMember = task.project.members.some(
+    (member) => member.id === session?.user?.id
+  );
+  if (!isMember) {
+    res.status(403).json({ message: "You are not a member of this project" });
+    return;
+  }
+
   await prisma.task.delete({
     where: { id: id as string },
   });
@@ -46,6 +68,17 @@ const updateTask = async (
   // Fetch task with provided ID
   const task = await prisma.task.findUnique({
     where: { id: id as string },
+    include: {
+      project: {
+        include: {
+          members: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   // If task doesn't exist, return 404 error
@@ -53,6 +86,15 @@ const updateTask = async (
     res.status(404).json({ message: "Task not found" });
     return;
   }
+  //ensure the user is a member of the tasks project
+  const isMember = task.project.members.some(
+    (member) => member.id === session?.user?.id
+  );
+  if (!isMember) {
+    res.status(403).json({ message: "You are not a member of this project" });
+    return;
+  }
+
   // Update the task
   const updatedTask = await prisma.task.update({
     where: { id: id as string },

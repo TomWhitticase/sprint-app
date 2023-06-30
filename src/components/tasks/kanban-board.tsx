@@ -167,7 +167,7 @@ export default function KanbanBoard({ tasks, updateTask }: KanbanBoardProps) {
         return (
           <div
             key={index}
-            className={`flex flex-col w-1/4 p-2 gap-2 rounded  ${
+            className={`flex flex-col desktop-only:w-1/4 p-2 gap-2 rounded  ${
               overColumn === taskCategory && draggingTask ? "bg-slate-200" : ""
             }`}
             onMouseUp={() => handleMouseUp(taskCategory)}

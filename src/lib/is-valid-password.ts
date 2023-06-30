@@ -1,45 +1,37 @@
-type ValidationResult = {
-  isValid: boolean;
-  message: string;
-};
-export default function isValidPassword(password: string): ValidationResult {
-  if (password.length < 8) {
-    return {
-      isValid: false,
-      message: "Password must be at least 8 characters long",
-    };
-  }
+export default function isValidPassword(password: string) {
+  const validLength = password.length >= 8 && password.length <= 20;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecialCharacter = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(
+    password
+  );
 
-  if (!/[a-z]/.test(password)) {
-    return {
-      isValid: false,
-      message: "Password must contain at least one lowercase character",
-    };
-  }
-
-  if (!/[A-Z]/.test(password)) {
-    return {
-      isValid: false,
-      message: "Password must contain at least one uppercase character",
-    };
-  }
-
-  if (!/[0-9]/.test(password)) {
-    return {
-      isValid: false,
+  const passwordConditions = [
+    {
+      condition: validLength,
+      message: "Password must be between 8 and 20 characters",
+    },
+    {
+      condition: hasUpperCase,
+      message: "Password must contain at least one uppercase letter",
+    },
+    {
+      condition: hasLowerCase,
+      message: "Password must contain at least one lowercase letter",
+    },
+    {
+      condition: hasNumber,
       message: "Password must contain at least one number",
-    };
-  }
-
-  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-    return {
-      isValid: false,
+    },
+    {
+      condition: hasSpecialCharacter,
       message: "Password must contain at least one special character",
-    };
-  }
+    },
+  ];
 
   return {
-    isValid: true,
-    message: "Password is valid",
+    isValid: passwordConditions.every((condition) => condition.condition),
+    conditions: passwordConditions,
   };
 }

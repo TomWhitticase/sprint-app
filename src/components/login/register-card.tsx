@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import ReactLoading from "react-loading";
-import { Button } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Button,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+} from "@chakra-ui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -25,11 +33,6 @@ const RegisterCard = () => {
     setError("");
     if (formValues.password !== formValues.confirmPassword) {
       setError("Passwords do not match");
-      return;
-    }
-    const passwordValidation = isValidPassword(formValues.password);
-    if (passwordValidation.isValid === false) {
-      setError(passwordValidation.message);
       return;
     }
 
@@ -146,21 +149,44 @@ const RegisterCard = () => {
                   >
                     Password
                   </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
-                    required
-                    value={formValues.password}
-                    onChange={(e) => {
-                      setFormValues({
-                        ...formValues,
-                        password: e.target.value,
-                      });
-                    }}
-                  />
+                  <Popover
+                    placement="right"
+                    isOpen={formValues.password.length > 0}
+                  >
+                    <PopoverTrigger>
+                      <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        className="bg-system-blue-veryLight text-white sm:text-sm rounded-lg block w-full p-2.5  border-gray-600 placeholder-neutral-400"
+                        required
+                        value={formValues.password}
+                        onChange={(e) => {
+                          setFormValues({
+                            ...formValues,
+                            password: e.target.value,
+                          });
+                        }}
+                      />
+                    </PopoverTrigger>
+                    <PopoverContent w="auto" bg="white">
+                      <PopoverBody p={2}>
+                        {isValidPassword(formValues.password).conditions.map(
+                          (condition, index) => (
+                            <Box
+                              key={index}
+                              color={
+                                condition.condition ? "green.500" : "red.500"
+                              }
+                            >
+                              <Text>{condition.message}</Text>
+                            </Box>
+                          )
+                        )}
+                      </PopoverBody>
+                    </PopoverContent>
+                  </Popover>
                 </div>
                 <div>
                   <input

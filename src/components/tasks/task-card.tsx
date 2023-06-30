@@ -126,9 +126,9 @@ export default function TaskCard({
           </div>
         </>
       )}
-      <div className="flex items-center justify-between gap-2 text-xs">
+      <div className="flex items-center justify-between gap-2 text-[0.7rem]">
         {task.endDate && <DeadlineBadge deadline={task.endDate} />}
-        <span className="flex items-center justify-center gap-2 px-2 py-1 rounded bg-slate-100">
+        <span className="flex items-center justify-center gap-1 px-2 py-1 rounded bg-slate-100">
           <BiComment /> {task.comments.length} comment
           {task.comments.length !== 1 && "s"}
         </span>
