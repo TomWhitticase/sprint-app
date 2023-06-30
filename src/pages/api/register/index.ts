@@ -1,11 +1,12 @@
 import { apiHandler } from "@/lib/api-handler";
 import isValidPassword from "@/lib/is-valid-password";
 import prisma from "@/lib/prisma";
-import sendEmail from "@/lib/send-email";
 import { NextApiRequest, NextApiResponse } from "next";
 import { send } from "process";
 import bcrypt from "bcrypt";
 import RandomString from "@/utils/random-string";
+import { InformationEvent } from "http";
+const nodemailer = require("nodemailer");
 
 //POST /api/register - register a new user with the given email, name and password
 
@@ -69,16 +70,51 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse) => {
     },
   });
   try {
-    const sendMail = await sendEmail({
-      recipientEmail: email as string,
-      subject: "Sprint - Confirm your email",
-      body: `Welcome to sprint! Please click this link to confirm your email address and activate your account ${
+    const transporter = nodemailer.createTransport({
+      service: "hotmail",
+      auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    await new Promise((resolve, reject) => {
+      // verify connection configuration
+      transporter.verify(function (error: Error, success: InformationEvent) {
+        if (error) {
+          console.log(error);
+          reject(error);
+        } else {
+          console.log("Server is ready to take our messages");
+          resolve(success);
+        }
+      });
+    });
+
+    const mailData = {
+      from: `Sprint <${process.env.EMAIL_USERNAME}>`,
+      to: email as string,
+      subject: `Activate your Sprint account`,
+      text: `Welcome to sprint! Please click this link to confirm your email address and activate your account ${
         process.env.NEXTAUTH_URL || "http://localhost:3000"
       }/register/activate?token=${confirmationToken}`,
+    };
+
+    await new Promise((resolve, reject) => {
+      // send mail
+      transporter.sendMail(mailData, (err: Error, info: InformationEvent) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          console.log(info);
+          resolve(info);
+        }
+      });
     });
+
     return res.status(200).json({
       message: "Registration successful, confirmation email sent",
-      sendMail,
     });
   } catch (error) {
     console.log(error);
