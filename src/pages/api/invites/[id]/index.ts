@@ -3,7 +3,7 @@ import { Session } from "next-auth";
 import prisma from "../../../../lib/prisma";
 import { apiHandler } from "@/lib/api-handler";
 
-//POST api/invites/{id} - accept invite
+// POST api/invites/{id} - accept invite
 // DELETE api/invites/{id} - delete an invitation
 
 /**

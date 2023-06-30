@@ -150,6 +150,7 @@ const RegisterCard = () => {
                     Password
                   </label>
                   <Popover
+                    autoFocus={false}
                     placement="right"
                     isOpen={formValues.password.length > 0}
                   >

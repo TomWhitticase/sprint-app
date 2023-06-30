@@ -6,12 +6,12 @@ type SendEmailParams = {
   body: string;
 };
 
-export async function sendEmail({
+export function sendEmail({
   recipientEmail,
   subject,
   body,
 }: SendEmailParams): Promise<void> {
-  try {
+  return new Promise((resolve, reject) => {
     const transporter = nodemailer.createTransport({
       service: "hotmail",
       auth: {
@@ -21,23 +21,30 @@ export async function sendEmail({
     });
 
     // Verify connection configuration
-    await transporter.verify();
+    transporter.verify((error) => {
+      if (error) {
+        console.error("Error verifying transporter:", error);
+        return reject();
+      }
 
-    const mailData = {
-      from: process.env.EMAIL_USERNAME,
-      to: recipientEmail,
-      subject: subject,
-      text: body,
-      html: `<div>${body}</div>`,
-    };
+      const mailData = {
+        from: process.env.EMAIL_USERNAME,
+        to: recipientEmail,
+        subject: subject,
+        text: body,
+        html: `<div>${body}</div>`,
+      };
 
-    // Send mail
-    await transporter.sendMail(mailData);
-    return Promise.resolve();
-  } catch (error) {
-    console.log(error);
-    return Promise.reject();
-  }
+      // Send mail
+      transporter.sendMail(mailData, (error) => {
+        if (error) {
+          console.error("Error sending mail:", error);
+          return reject();
+        }
+        return resolve();
+      });
+    });
+  });
 }
 
 export default sendEmail;
