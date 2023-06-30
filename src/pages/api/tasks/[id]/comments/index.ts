@@ -20,6 +20,12 @@ const createComment = async (
     include: {
       project: {
         include: {
+          leader: {
+            select: {
+              id: true,
+            },
+          },
+
           members: {
             select: {
               id: true,
@@ -36,7 +42,8 @@ const createComment = async (
   const isMember = task.project.members.some(
     (member) => member.id === session?.user?.id
   );
-  if (!isMember) {
+  const isLeader = task.project.leader.id === session?.user?.id;
+  if (!isMember && !isLeader) {
     res.status(403).json({ message: "You are not a member of this project" });
     return;
   }

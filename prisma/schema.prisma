@@ -84,8 +84,8 @@ enum TaskPriority {
 
 model Task {
   id          String       @id @unique @default(cuid())
-  name        String
-  description String       @default("")
+  name        String       @db.VarChar(500)
+  description String       @default("") @db.VarChar(10000)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt @default(now())
   project     Project      @relation(fields: [projectId], references: [id])
@@ -110,7 +110,7 @@ model TaskComment {
   task      Task     @relation(fields: [taskId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  content   String
+  content   String   @db.VarChar(10000)
 
   @@index([userId])
   @@index([taskId])
@@ -121,7 +121,7 @@ model Post {
   id        String   @id @unique @default(cuid())
   title     String   @db.VarChar(500)
   content   String   @db.VarChar(10000)
-  tags      String
+  tags      String   @db.VarChar(1000)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
   author    User     @relation(fields: [authorId], references: [id])
@@ -145,7 +145,7 @@ model PostComment {
   childrenComments  PostComment[]  @relation("PostCommentChildren")
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt @default(now())
-  content           String
+  content           String        @db.VarChar(10000)
 
   @@index([parentCommentId])
   @@index([postId])
