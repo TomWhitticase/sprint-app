@@ -98,7 +98,7 @@ export default function InviteUsers({ projectId, onClose }: InviteUsersProps) {
       <h1 className="text-xl font-bold ">Invite Users</h1>
       <Input
         type="text"
-        placeholder="Search users"
+        placeholder="Search users..."
         value={searchQuery}
         onChange={handleSearchChange}
       />

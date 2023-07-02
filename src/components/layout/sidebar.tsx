@@ -3,7 +3,14 @@ import { useRouter } from "next/router";
 import NavButton from "./nav-button";
 import UserProfile from "./user-profile";
 import { useProjects } from "@/hooks/use-projects";
-import { FaChartBar, FaEnvelope, FaHome, FaPlus } from "react-icons/fa";
+import {
+  FaArchive,
+  FaChartBar,
+  FaEnvelope,
+  FaHome,
+  FaPlus,
+  FaTasks,
+} from "react-icons/fa";
 import ReactLoading from "react-loading";
 import ProjectNavItem from "./project-nav-item";
 import { useInvites } from "@/hooks/use-invites";
@@ -17,7 +24,7 @@ export default function Sidebar() {
 
   return (
     <div className="relative flex flex-col flex-1 gap-2 p-4 w-[17rem] bg-system-blue z-[500]">
-      <div className="flex flex-col flex-1 h-full gap-2">
+      <div className="flex flex-col flex-1 h-full gap-0">
         <span
           onClick={() => router.push("/")}
           className="flex items-center justify-start gap-2 pb-4 cursor-pointer"
@@ -31,18 +38,15 @@ export default function Sidebar() {
           <span className="text-xl font-bold text-white">Sprint</span>
         </span>
         <NavButton link={"/dashboard"} text={"Dashboard"} icon={<FaHome />} />
-        <NavButton
-          link={"/analytics"}
-          text={"Analytics"}
-          icon={<FaChartBar />}
-        />
+        <NavButton link={"/tasks"} text={"Tasks"} icon={<FaTasks />} />
+        <NavButton link={"/archive"} text={"Archive"} icon={<FaArchive />} />
         <NavButton
           link={"/invites"}
           text={"Invites"}
           icon={<FaEnvelope />}
           notifications={invites?.length}
         />
-        <div className="flex flex-col flex-1 gap-0">
+        <div className="flex flex-col flex-1 gap-0 pt-2">
           <span className="flex items-center justify-between">
             <h1
               onClick={() => router.push("/projects")}
@@ -58,7 +62,7 @@ export default function Sidebar() {
             </button>
           </span>
           <div className="relative flex flex-col w-full h-full overflow-y-auto">
-            <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col transition-all duration-300 ease-in-out">
+            <div className="absolute top-0 bottom-0 left-0 right-0 flex flex-col px-2 transition-all duration-300 ease-in-out">
               {projectsIsLoading ? (
                 <ReactLoading
                   type={"bubbles"}

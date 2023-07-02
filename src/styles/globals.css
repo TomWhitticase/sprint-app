@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+}
+
 /* Width and height of the scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

@@ -19,7 +19,7 @@ export default function NavButton(props: navButtonProps) {
         !(router.pathname === link)
           ? `bg-system-blue hover:bg-system-blue-light`
           : `bg-system-blue-veryLight`
-      } rounded-lg px-4 py-2 text-system-grey-text transition-all duration-300 flex items-center justify-start gap-2`}
+      } rounded-lg px-3 py-2 text-system-grey-text transition-all duration-300 flex items-center justify-start gap-2`}
     >
       {icon} {text}{" "}
       {notifications > 0 && (

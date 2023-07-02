@@ -17,6 +17,9 @@ const getTasks = async (
   const tasks = await prisma.task.findMany({
     where: {
       projectId: projectId,
+      project: {
+        archived: false,
+      },
     },
     include: {
       assignees: {

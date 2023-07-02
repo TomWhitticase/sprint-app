@@ -6,6 +6,8 @@ import { Session } from "next-auth";
 //POST api/projects - create a new project
 //GET api/projects - get all projects i belong to
 
+//TODO update the doc for archived
+
 /**
  * @swagger
  * /api/projects:
@@ -134,7 +136,7 @@ const getProjects = async (
     switch (role) {
       case "leader":
         projects = await prisma.project.findMany({
-          where: { leaderId: user.id },
+          where: { leaderId: user.id, archived: false },
           include: {
             leader: {
               select: {
@@ -157,7 +159,7 @@ const getProjects = async (
         break;
       case "member":
         projects = await prisma.project.findMany({
-          where: { members: { some: { id: user.id } } },
+          where: { members: { some: { id: user.id } }, archived: false },
           include: {
             leader: {
               select: {
@@ -182,6 +184,7 @@ const getProjects = async (
         projects = await prisma.project.findMany({
           where: {
             OR: [{ leaderId: user.id }, { members: { some: { id: user.id } } }],
+            archived: false,
           },
           include: {
             leader: {

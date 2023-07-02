@@ -23,7 +23,7 @@ export default function Home() {
         <div className="flex items-center justify-between w-full gap-2">
           <Input
             bg={"white"}
-            placeholder="Search projects"
+            placeholder="Search projects..."
             className="w-full"
           />
           <Button

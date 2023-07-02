@@ -46,13 +46,13 @@ export default function ResourcesPage({ id }: ResourcesPageProps) {
         ]}
         current={"Resources"}
       />
-      <main className="flex-1 w-full h-full flex flex-col p-4 gap-2">
-        <div className="flex gap-2 justify-center items-center">
+      <main className="flex flex-col flex-1 w-full h-full gap-2 p-4">
+        <div className="flex items-center justify-center gap-2">
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             bg={"white"}
-            placeholder="Search Resources.."
+            placeholder="Search Resources..."
           />
           <Button variant="black" onClick={onOpen}>
             New Resource

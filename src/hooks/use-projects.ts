@@ -1,4 +1,4 @@
-import { Project } from "@prisma/client";
+import { Project, Task } from "@prisma/client";
 import {
   UseMutateFunction,
   useMutation,
@@ -6,9 +6,16 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import axios from "axios";
+import { ar } from "date-fns/locale";
 
 // Fetch Projects
-async function fetchProjects(role?: "leader" | "member") {
+async function fetchProjects(role?: "leader" | "member", archived?: boolean) {
+  if (archived) {
+    const { data } = await axios.get(`/api/projects/archived`, {
+      withCredentials: true,
+    });
+    return data;
+  }
   const { data } = await axios.get(`/api/projects?role=${role}`, {
     withCredentials: true,
   });
@@ -29,14 +36,16 @@ async function deleteProjectRequest(id: string) {
   return data;
 }
 
-export function useProjects(role?: "leader" | "member") {
+export function useProjects(role?: "leader" | "member", archived?: boolean) {
   const queryClient = useQueryClient();
 
   const {
     data: projects,
     isLoading: projectsIsLoading,
     error: projectsError,
-  } = useQuery(["projects"], () => fetchProjects(role));
+  } = useQuery(["projects", role, archived], () =>
+    fetchProjects(role, archived)
+  );
 
   const createProjectMutation = useMutation(createProjectRequest, {
     onSuccess: (data) => {

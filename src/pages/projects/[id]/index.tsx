@@ -1,6 +1,9 @@
 import Head from "@/components/Head";
 import ProjectLinkBar from "@/components/projects/project-link-bar";
 import ProjectSubNavItem from "@/components/projects/project-sub-nav-item";
+import TaskPrioritySnapshot from "@/components/widgets/task-priority-snaphsot";
+import TaskStatusSnapshot from "@/components/widgets/task-status-snapshot";
+import UpcomingTasks from "@/components/widgets/upcoming-tasks";
 import { useProject } from "@/hooks/use-project";
 import { Button, Input, Textarea } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
@@ -34,6 +37,9 @@ export default function ProjectPage({ id }: ProjectPageProps) {
   const [leaving, setLeaving] = useState(false);
 
   const handleDelete = async () => {
+    if (!confirm("Are you sure you want to delete this project?")) {
+      return;
+    }
     setDeleting(true);
     try {
       await deleteProject(id);
@@ -45,9 +51,23 @@ export default function ProjectPage({ id }: ProjectPageProps) {
   };
 
   const handleArchive = async () => {
+    if (
+      !confirm(
+        `Are you sure you want to ${
+          project.archived ? "unarchive" : "archive"
+        } this project?`
+      )
+    ) {
+      return;
+    }
+
     setArchiving(true);
     try {
-      await deleteProject(id);
+      await updateProject({
+        projectId: id,
+        archived: !project.archived,
+      });
+
       router.push("/projects");
     } catch (error) {
       alert("something went wrong");
@@ -56,6 +76,10 @@ export default function ProjectPage({ id }: ProjectPageProps) {
   };
 
   const handleLeave = async () => {
+    if (!confirm("Are you sure you want to leave this project?")) {
+      return;
+    }
+
     setLeaving(true);
     try {
       await removeUserFromProject({ projectId: id, userId: session?.user.id });
@@ -134,32 +158,41 @@ export default function ProjectPage({ id }: ProjectPageProps) {
             />
           </div>
         </div>
-        <div className="flex flex-col items-start justify-start gap-4 p-4 bg-white border-2 rounded-lg ">
+        <div className="flex flex-col items-start justify-start gap-4 p-4 bg-white border-2 rounded-lg">
           <h1 className="text-xl font-bold">Project Links</h1>
-          <ProjectSubNavItem
-            variant="black"
-            name={"Team"}
-            link={"/projects/" + id + "/team"}
-            icon={<FaUsers />}
-          />
-          <ProjectSubNavItem
-            variant="black"
-            name={"Tasks"}
-            link={"/projects/" + id + "/tasks"}
-            icon={<FaTasks />}
-          />
-          <ProjectSubNavItem
-            variant="black"
-            name={"Resources"}
-            link={"/projects/" + id + "/resources"}
-            icon={<FaFileAlt />}
-          />
-          <ProjectSubNavItem
-            variant="black"
-            name={"Discussions"}
-            link={"/projects/" + id + "/discussions"}
-            icon={<IoMdChatboxes />}
-          />
+          <div className="flex items-center justify-center gap-4">
+            <ProjectSubNavItem
+              variant={"black"}
+              name={"Team"}
+              link={"/projects/" + id + "/team"}
+              icon={<FaUsers />}
+            />
+            <ProjectSubNavItem
+              variant={"black"}
+              name={"Tasks"}
+              link={"/projects/" + id + "/tasks"}
+              icon={<FaTasks />}
+            />
+            <ProjectSubNavItem
+              variant={"black"}
+              name={"Resources"}
+              link={"/projects/" + id + "/resources"}
+              icon={<FaFileAlt />}
+            />
+            <ProjectSubNavItem
+              variant={"black"}
+              name={"Discussions"}
+              link={"/projects/" + id + "/discussions"}
+              icon={<IoMdChatboxes />}
+            />
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <div className="flex flex-col gap-2">
+            <TaskStatusSnapshot tasks={project.tasks} />
+            <TaskPrioritySnapshot tasks={project.tasks} />
+          </div>
+          <UpcomingTasks tasks={project.tasks} />
         </div>
         <div className="flex flex-col items-start justify-start gap-4 p-4 bg-white border-2 rounded-lg ">
           <h1 className="text-xl font-bold">Danger Zone</h1>
@@ -168,14 +201,26 @@ export default function ProjectPage({ id }: ProjectPageProps) {
             onClick={() => {
               if (!leaving) handleLeave();
             }}
+            isDisabled={leaving}
+            isLoading={leaving}
           >
             {leaving ? "Leaving..." : "Leave Project"}
           </Button>
 
-          <Button variant="white" onClick={handleArchive} disabled={archiving}>
-            {archiving ? "Archiving..." : "Archive Project"}
+          <Button
+            variant="white"
+            onClick={handleArchive}
+            isDisabled={archiving}
+            isLoading={archiving}
+          >
+            {project?.archived ? "Unarchive Project" : "Archive Project"}
           </Button>
-          <Button colorScheme="red" onClick={handleDelete} disabled={deleting}>
+          <Button
+            colorScheme="red"
+            onClick={handleDelete}
+            isDisabled={deleting}
+            isLoading={deleting}
+          >
             {deleting ? "Deleting..." : "Delete Project"}
           </Button>
         </div>

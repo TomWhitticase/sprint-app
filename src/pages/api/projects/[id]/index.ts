@@ -7,6 +7,8 @@ import { Session } from "next-auth";
 //GET api/projects/{id} - get a single project
 //PUT api/projects/{id} - update a project's attributes [TODO SWAGGER]
 
+//TODO update swagger doc for updating archive status
+
 /**
  * @swagger
  * /api/projects/{id}:
@@ -70,6 +72,7 @@ const getProject = async (
             avatarUrl: true,
           },
         },
+        tasks: true,
       },
     });
 
@@ -176,7 +179,7 @@ const updateProject = async (
   session: Session | null
 ) => {
   const id = req.query.id as string;
-  const { name, description } = req.body;
+  const { name, description, archived } = req.body;
 
   if (!id) {
     return res.status(400).json({
@@ -224,8 +227,10 @@ const updateProject = async (
         id,
       },
       data: {
-        name: name ? name : project.name,
-        description: description ? description : project.description,
+        name: name !== undefined ? name : project.name,
+        description:
+          description !== undefined ? description : project.description,
+        archived: archived !== undefined ? archived : project.archived,
       },
       include: {
         leader: {

@@ -33,19 +33,19 @@ export default function ProjectNavItem({ name, id }: ProjectNavItemProps) {
   }, [id]);
 
   return (
-    <div className="flex flex-col gap-2 transition-all duration-300 ease-in-out">
+    <div className="flex flex-col gap-0 transition-all duration-300 ease-in-out">
       <div
         onClick={handleClick}
-        className={`flex group justify-between rounded-lg px-2 py-2 duration-300 transition-all ease-in-out items-center gap-2  cursor-pointer
+        className={`flex group justify-between rounded-lg px-1 py-2 duration-300 transition-all ease-in-out items-center gap-2  cursor-pointer
         ${selected ? "text-white" : "text-slate-400"}
               `}
       >
-        <span className="flex items-center justify-start gap-2">
+        <span className="flex items-center justify-start gap-3">
           <span
             style={{ backgroundColor: tagColor }}
-            className={`w-4 h-4 rounded`}
+            className={`w-3 h-3 rounded-sm`}
           ></span>
-          {name}
+          <span className="truncate w-44 ">{name}</span>
         </span>
         <span
           className={`opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out
@@ -59,7 +59,7 @@ export default function ProjectNavItem({ name, id }: ProjectNavItemProps) {
         </span>
       </div>
       <div
-        className={`flex transition-all ease-in-out flex-col gap-2 ml-4 duration-300  overflow-hidden ${
+        className={`flex transition-all ease-in-out flex-col gap-0 ml-4 duration-300  overflow-hidden ${
           selected ? "max-h-96" : "max-h-0"
         }`}
       >

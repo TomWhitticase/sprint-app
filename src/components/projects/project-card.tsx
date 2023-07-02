@@ -16,12 +16,17 @@ import UserAvatarGroup from "../users/user-avatar-group";
 
 export interface ProjectCardProps {
   project: Project & { members: User[]; leader: User };
+  onClick?: () => void;
 }
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({ project, onClick }: ProjectCardProps) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/projects/${project.id}`);
+    if (onClick !== undefined) {
+      onClick();
+    } else {
+      router.push(`/projects/${project.id}`);
+    }
   };
   return (
     <div

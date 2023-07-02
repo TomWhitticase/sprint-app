@@ -8,6 +8,12 @@ async function getTasks(projectId: string) {
   });
   return data;
 }
+async function getAllMyTasks() {
+  const { data } = await axios.get(`/api/tasks`, {
+    withCredentials: true,
+  });
+  return data;
+}
 
 async function deleteTask(taskId: string) {
   const { data } = await axios.delete(`/api/tasks/${taskId}`, {
@@ -45,16 +51,20 @@ async function createTask(projectId: string, newTask: NewTaskInputs) {
   return data;
 }
 
-export function useTasks(projectId?: string) {
+export function useTasks(projectId?: string, allMyTasks?: boolean) {
   const queryClient = useQueryClient();
   const tasksQuery = useQuery<
     (Task & {
       assignees: User[];
     })[],
     Error
-  >(["tasks", projectId], () => getTasks(projectId!), {
-    enabled: !!projectId,
-  });
+  >(
+    ["tasks", projectId],
+    () => (allMyTasks ? getAllMyTasks() : getTasks(projectId!)),
+    {
+      enabled: !!projectId || allMyTasks,
+    }
+  );
 
   const createTaskMutation = useMutation(
     (newTask: NewTaskInputs) => createTask(projectId!, newTask),

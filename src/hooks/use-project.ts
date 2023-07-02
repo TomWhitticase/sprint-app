@@ -33,16 +33,19 @@ async function updateProjectRequest({
   projectId,
   name,
   description,
+  archived,
 }: {
   projectId: string;
   name?: string;
   description?: string;
+  archived?: boolean;
 }) {
   const { data } = await axios.put(
     `/api/projects/${projectId}`,
     {
       name,
       description,
+      archived,
     },
     {
       withCredentials: true,

@@ -38,6 +38,7 @@ model Project {
   tasks       Task[]
   resources   Resource[]
   invites     ProjectInvite[]
+  archived    Boolean   @default(false)
 
   @@index([leaderId])
 }
