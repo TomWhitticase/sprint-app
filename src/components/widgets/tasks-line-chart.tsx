@@ -95,6 +95,7 @@ export default function TasksLineChart({ tasks }: TasksLineChartProps) {
           <Tooltip />
           <Legend />
           <Line
+            isAnimationActive={false}
             animateNewValues={false}
             type="monotone"
             dataKey="Tasks Started"
@@ -103,6 +104,7 @@ export default function TasksLineChart({ tasks }: TasksLineChartProps) {
             activeDot={{ r: 6 }}
           />
           <Line
+            isAnimationActive={false}
             animateNewValues={false}
             strokeWidth={3}
             type="monotone"
