@@ -197,6 +197,9 @@ export default function NewTask({ createTask, project }: NewTaskProps) {
           <FormControl>
             <FormLabel>Start and End Date</FormLabel>
             <RangeDatepicker
+              configs={{
+                dateFormat: "dd/MM/yyyy",
+              }}
               selectedDates={selectedDates}
               onDateChange={setSelectedDates}
             />
