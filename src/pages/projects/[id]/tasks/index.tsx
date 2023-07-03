@@ -68,7 +68,7 @@ export default function TasksPage({ id }: TasksPageProps) {
         current={"Tasks"}
       />
       <main className="flex flex-col w-full h-full gap-2 p-4">
-        <div className="flex items-center gap-4 jsutify-between">
+        <div className="flex items-center gap-2 jsutify-between">
           <div className="flex items-center justify-center gap-2 p-1 bg-white border-2 rounded-lg">
             <Tooltip label="Grid View" aria-label="Grid View">
               <button

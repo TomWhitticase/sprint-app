@@ -15,7 +15,7 @@ export default function ArchivePage() {
       <Head title="Archive" />
       <ProjectLinkBar links={[]} current={"Archive"} />
 
-      <main className="flex flex-col items-start justify-start w-full h-full gap-4 p-4">
+      <main className="flex flex-col items-start justify-start w-full h-full gap-2 p-4">
         <div className="flex items-center justify-between w-full gap-2">
           <Input
             bg={"white"}
@@ -25,7 +25,7 @@ export default function ArchivePage() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <div className="flex flex-wrap items-start justify-start w-full gap-4 p-4">
+        <div className="flex flex-wrap items-start justify-start w-full gap-2">
           {projects?.length === 0 && (
             <div className="flex flex-col items-center justify-center w-full gap-2 p-4 bg-white border-2 rounded-lg">
               <h1>You have no archived projects</h1>

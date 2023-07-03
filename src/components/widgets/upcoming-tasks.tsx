@@ -49,15 +49,15 @@ export default function UpcomingTasks({ tasks }: UpcomingTasksProps) {
   );
 
   return (
-    <Box className="flex flex-col w-full gap-4 p-4 bg-white border-2 rounded-lg shadow-lg">
+    <Box className="flex flex-col w-full h-full gap-4 p-4 bg-white border-2 rounded-lg">
       <h1 className="text-lg font-bold">Upcoming Tasks</h1>
-      <div className="flex items-center justify-center gap-2 text-sm">
+      <div className="flex items-center justify-center gap-2 text-sm mobile-only:flex-col">
         Include
         <CheckboxGroup
           value={selectedStatuses}
           onChange={(value) => setSelectedStatuses(value as TaskStatus[])}
         >
-          <Stack direction="row">
+          <div className="flex items-center justify-center gap-2 text-sm mobile-only:flex-col">
             <Checkbox
               className="p-1 px-2 text-sm border-2 rounded"
               value="TODO"
@@ -82,7 +82,7 @@ export default function UpcomingTasks({ tasks }: UpcomingTasksProps) {
             >
               Completed
             </Checkbox>
-          </Stack>
+          </div>
         </CheckboxGroup>
       </div>
       <div className="relative">

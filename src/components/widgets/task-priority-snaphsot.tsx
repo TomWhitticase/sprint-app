@@ -79,13 +79,13 @@ export default function TaskPrioritySnapshot({
   return (
     <div className="flex flex-col gap-4 p-4 bg-white border-2 rounded-lg w-min">
       <h1 className="text-lg font-bold">Task Priority Snapshot</h1>
-      <div className="flex items-center justify-center gap-2 text-sm">
+      <div className="flex items-center justify-center gap-2 text-sm mobile-only:flex-col">
         Include
         <CheckboxGroup
           value={selectedStatuses}
           onChange={(value) => setSelectedStatuses(value as TaskStatus[])}
         >
-          <Stack direction="row">
+          <div className="flex gap-2 mobile-only:flex-col">
             <Checkbox
               className="p-1 px-2 text-sm border-2 rounded"
               value="TODO"
@@ -101,7 +101,7 @@ export default function TaskPrioritySnapshot({
             <Checkbox className="p-1 px-2 border-2 rounded" value="COMPLETED">
               <p className="text-sm">Completed</p>
             </Checkbox>
-          </Stack>
+          </div>
         </CheckboxGroup>
       </div>
       <div className="relative">
@@ -109,7 +109,7 @@ export default function TaskPrioritySnapshot({
           className="relative"
           layout="vertical"
           width={500}
-          height={200}
+          height={140}
           data={data}
         >
           {tasks && (

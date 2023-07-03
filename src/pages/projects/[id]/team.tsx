@@ -107,15 +107,15 @@ export default function TeamPage({ id }: TeamPageProps) {
         ]}
         current={"Team"}
       />
-      <main className="flex flex-col w-full h-full gap-4 p-4">
-        <div className="flex flex-col items-start justify-start gap-4 p-4 bg-white border-2 rounded-lg ">
+      <main className="flex flex-col w-full h-full gap-2 p-4">
+        <div className="flex flex-col items-start justify-start gap-2 p-4 bg-white border-2 rounded-lg ">
           <h1 className="text-xl font-bold">Team Leader</h1>
           <span className="flex items-center justify-start w-full gap-2 ">
             <UserAvatar user={project?.leader} />
             {project?.leader.name}
           </span>
         </div>
-        <div className="flex flex-col items-start justify-start gap-4 p-4 bg-white border-2 rounded-lg ">
+        <div className="flex flex-col items-start justify-start gap-2 p-4 bg-white border-2 rounded-lg ">
           <span className="flex items-center justify-between w-full">
             <h1 className="text-xl font-bold">Team Members</h1>
 

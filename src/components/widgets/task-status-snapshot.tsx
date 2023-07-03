@@ -81,7 +81,7 @@ export default function TaskStatusSnapshot({ tasks }: TaskStatusSnapshotProps) {
           className="relative"
           layout="vertical"
           width={500}
-          height={250}
+          height={160}
           data={data}
         >
           {tasks && (

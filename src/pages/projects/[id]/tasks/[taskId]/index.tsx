@@ -118,10 +118,10 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
       <main className="flex flex-col w-full gap-2 p-4">
         <div className="flex items-start justify-center gap-8 p-4 bg-white border-2 rounded-lg mobile-only:flex-col desktop-only:flex-row">
           <div className="flex flex-col w-full gap-2">
-            <span className="flex items-center justify-start h-8 gap-4">
+            <span className="flex items-center justify-start h-8 gap-2">
               <h1 className="text-lg font-bold">Task Name</h1>
               {taskName !== task?.name && (
-                <div className="flex items-center justify-start gap-4">
+                <div className="flex items-center justify-start gap-2">
                   <Button
                     onClick={() => {
                       updateTask({
@@ -143,17 +143,17 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
                 </div>
               )}
             </span>
-            <div className="flex w-full gap-4">
+            <div className="flex w-full gap-2">
               <Input
                 value={taskName}
                 onChange={(e) => setTaskName(e.target.value)}
                 className="w-full"
               />
             </div>
-            <span className="flex items-center justify-start h-8 gap-4">
+            <span className="flex items-center justify-start h-8 gap-2">
               <h1 className="text-lg font-bold">Task Description</h1>
               {taskDescription !== task?.description && (
-                <div className="flex items-center justify-start gap-4">
+                <div className="flex items-center justify-start gap-2">
                   <Button
                     onClick={() => {
                       updateTask({
@@ -175,7 +175,7 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
                 </div>
               )}
             </span>
-            <div className="flex w-full gap-4">
+            <div className="flex w-full gap-2">
               <Textarea
                 cols={3}
                 value={taskDescription}
@@ -183,7 +183,7 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
                 className="w-full"
               />
             </div>
-            <span className="flex items-center justify-start h-8 gap-4">
+            <span className="flex items-center justify-start h-8 gap-2">
               <h1 className="text-lg font-bold">Start and End Dates</h1>
               {task?.startDate &&
               task?.endDate &&
@@ -192,7 +192,7 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
                 selectedDates[1],
                 new Date(task?.endDate)
               ) ? null : selectedDates[0] && selectedDates[1] ? (
-                <div className="flex items-center justify-start gap-4">
+                <div className="flex items-center justify-start gap-2">
                   <Button
                     onClick={() => {
                       updateTask({
@@ -220,17 +220,17 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
                 <span>Select a start and end date</span>
               )}
             </span>
-            <div className="flex items-center justify-start w-full gap-4">
+            <div className="flex items-center justify-start w-full gap-2">
               <RangeDatepicker
                 selectedDates={selectedDates}
                 onDateChange={setSelectedDates}
               />
             </div>
 
-            <span className="flex items-center justify-start h-8 gap-4">
+            <span className="flex items-center justify-start h-8 gap-2">
               <h1 className="text-lg font-bold">Task Status</h1>
               {taskStatus !== task?.status && (
-                <div className="flex items-center justify-start gap-4">
+                <div className="flex items-center justify-start gap-2">
                   <Button
                     onClick={() => {
                       updateTask({
@@ -252,7 +252,7 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
                 </div>
               )}
             </span>
-            <div className="relative flex w-full gap-4">
+            <div className="relative flex w-full gap-2">
               <Select
                 value={taskStatus}
                 onChange={(e) => setTaskStatus(e.target.value as TaskStatus)}
@@ -321,10 +321,10 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
               </div>
             </div>
 
-            <span className="flex items-center justify-start h-8 gap-4">
+            <span className="flex items-center justify-start h-8 gap-2">
               <h1 className="text-lg font-bold">Task Priority</h1>
               {taskPriority !== task?.priority && (
-                <div className="flex items-center justify-start gap-4">
+                <div className="flex items-center justify-start gap-2">
                   <Button
                     onClick={() => {
                       updateTask({
@@ -347,7 +347,7 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
               )}
             </span>
 
-            <div className="relative flex w-full gap-4">
+            <div className="relative flex w-full gap-2">
               <Select
                 value={taskPriority}
                 onChange={(e) =>
@@ -402,7 +402,7 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
             <Divider orientation="vertical" />
           </div>
           <div className="flex flex-col w-full gap-2">
-            <span className="flex items-center justify-start h-8 gap-4">
+            <span className="flex items-center justify-start h-8 gap-2">
               <h1 className="text-lg font-bold">Task Assignees</h1>
               {task?.assignees
                 .map((a) => a.id)
@@ -414,7 +414,7 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
                   .sort()
                   .join(",")
                   .toString() && (
-                <div className="flex items-center justify-start gap-4">
+                <div className="flex items-center justify-start gap-2">
                   <Button
                     onClick={() => {
                       updateTask({
@@ -436,18 +436,18 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
                 </div>
               )}
             </span>
-            <div className="flex w-full gap-4">
+            <div className="flex w-full gap-2">
               <SelectUsers
                 users={project.members || []}
                 selectedUsers={taskAssignees || []}
                 setSelectedUsers={setTaskAssignees}
               />
             </div>
-            <span className="flex items-center justify-start h-8 gap-4">
+            <span className="flex items-center justify-start h-8 gap-2">
               <h1 className="text-lg font-bold">Todo List</h1>
 
               {JSON.stringify(taskTodos) !== JSON.stringify(task?.todos) && (
-                <div className="flex items-center justify-start gap-4">
+                <div className="flex items-center justify-start gap-2">
                   <Button
                     onClick={() => {
                       updateTask({
@@ -471,13 +471,13 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
                 </div>
               )}
             </span>
-            <div className="flex flex-col w-full gap-4">
+            <div className="flex flex-col w-full gap-2">
               <TodoList todos={taskTodos} setTodos={setTaskTodos} />
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-start justify-start gap-4 p-4 bg-white border-2 rounded-lg">
-          <div className="flex items-center justify-center w-full gap-4">
+        <div className="flex flex-col items-start justify-start gap-2 p-4 bg-white border-2 rounded-lg">
+          <div className="flex items-center justify-center w-full gap-2">
             <Input
               variant={"flushed"}
               value={commentInput}
@@ -505,8 +505,8 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
                   <UserAvatar user={c.user} />
                 </div>
                 <div className="w-full">
-                  <div className="flex items-center justify-between w-full gap-4">
-                    <div className="flex items-center justify-start flex-1 gap-4">
+                  <div className="flex items-center justify-between w-full gap-2">
+                    <div className="flex items-center justify-start flex-1 gap-2">
                       <p className="font-bold">{c.user.name}</p>
                       <p className="text-slate-400">
                         {new Date(c.createdAt).toLocaleDateString("en-US", {

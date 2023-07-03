@@ -104,7 +104,7 @@ export default function ProjectPage({ id }: ProjectPageProps) {
         links={[{ link: "/projects", text: "Projects" }]}
         current={project.name}
       />
-      <main className="flex flex-col gap-4 p-4">
+      <main className="flex flex-col gap-2 p-4">
         <div className="flex flex-col items-start justify-center gap-4 p-4 bg-white border-2 rounded-lg">
           <span className="flex items-center justify-center h-8 gap-4">
             <h1 className="text-xl font-bold">Project Name</h1>
@@ -131,7 +131,7 @@ export default function ProjectPage({ id }: ProjectPageProps) {
               className="w-full"
             />
           </div>
-          <span className="flex items-center justify-center h-8 gap-4">
+          <span className="flex items-center justify-center h-8 gap-2">
             <h1 className="text-xl font-bold">Project Description</h1>
             {projectDescription !== project?.description && (
               <Button
@@ -149,7 +149,7 @@ export default function ProjectPage({ id }: ProjectPageProps) {
               </Button>
             )}
           </span>
-          <div className="flex w-full gap-4">
+          <div className="flex w-full gap-2">
             <Textarea
               cols={3}
               value={projectDescription}
@@ -158,9 +158,9 @@ export default function ProjectPage({ id }: ProjectPageProps) {
             />
           </div>
         </div>
-        <div className="flex flex-col items-start justify-start gap-4 p-4 bg-white border-2 rounded-lg">
+        <div className="flex flex-col items-start justify-start gap-2 p-4 bg-white border-2 rounded-lg">
           <h1 className="text-xl font-bold">Project Links</h1>
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-2">
             <ProjectSubNavItem
               variant={"black"}
               name={"Team"}
@@ -194,7 +194,7 @@ export default function ProjectPage({ id }: ProjectPageProps) {
           </div>
           <UpcomingTasks tasks={project.tasks} />
         </div>
-        <div className="flex flex-col items-start justify-start gap-4 p-4 bg-white border-2 rounded-lg ">
+        <div className="flex flex-col items-start justify-start gap-2 p-4 bg-white border-2 rounded-lg ">
           <h1 className="text-xl font-bold">Danger Zone</h1>
           <Button
             variant="black"

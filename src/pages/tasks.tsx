@@ -22,7 +22,7 @@ export default function TasksPage() {
     <>
       <Head title="Tasks" />
       <ProjectLinkBar links={[]} current={"Tasks"} />
-      <main className="flex flex-col w-full h-full gap-4 p-4">
+      <main className="flex flex-col w-full h-full gap-2 p-4">
         {projects && (
           <Select
             bg={"white"}

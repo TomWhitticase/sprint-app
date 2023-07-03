@@ -46,8 +46,8 @@ export default function DiscussionsPage({ id }: DiscussionsPageProps) {
         ]}
         current={"Discussions"}
       />
-      <main className="flex flex-col w-full h-full gap-4 p-4">
-        <div className="flex items-center justify-center w-full gap-4">
+      <main className="flex flex-col w-full h-full gap-2 p-4">
+        <div className="flex items-center justify-center w-full gap-2">
           <Input
             bg="white"
             value={searchQuery}

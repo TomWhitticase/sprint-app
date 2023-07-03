@@ -1,4 +1,5 @@
 import Head from "@/components/Head";
+import ProjectLinkBar from "@/components/projects/project-link-bar";
 import { useInvites } from "@/hooks/use-invites";
 import { Button } from "@chakra-ui/react";
 import { Project, ProjectInvite } from "@prisma/client";
@@ -49,9 +50,10 @@ export default function InvitesPage() {
   return (
     <>
       <Head title="Invites" />
+      <ProjectLinkBar links={[]} current={"Invites"} />
 
       <main className="flex flex-col gap-2 p-4">
-        <div className="flex flex-col gap-2 p-4">
+        <div className="flex flex-col gap-2">
           {invites?.map(
             (inv: ProjectInvite & { project: Project }, i: number) => (
               <div

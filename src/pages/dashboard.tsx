@@ -5,6 +5,7 @@ import ArchivedProjects from "@/components/widgets/archived-projects";
 import TaskPrioritySnapshot from "@/components/widgets/task-priority-snaphsot";
 import TaskStatusSnapshot from "@/components/widgets/task-status-snapshot";
 import TasksAssigned from "@/components/widgets/tasks-assigned";
+import TasksLineChart from "@/components/widgets/tasks-line-chart";
 import UpcomingTasks from "@/components/widgets/upcoming-tasks";
 import { useTasks } from "@/hooks/use-tasks";
 import { useSession } from "next-auth/react";
@@ -18,31 +19,33 @@ export default function DashboardPage() {
     <>
       <Head title="Dashboard" />
       <ProjectLinkBar links={[]} current={"Dashboard"} />
-      <main className="flex flex-col w-full h-full gap-4 p-4">
-        <div className="py-2 text-4xl ">
+      <main className="flex flex-col w-full h-full gap-2 p-4">
+        <div className="py-1 text-4xl">
           Welcome back, <span className="font-bold">{session?.user?.name}</span>
         </div>
 
-        <div className="flex w-full gap-4">
-          <div className="w-1/3">
+        <div className="flex w-full gap-2 mobile-only:flex-col">
+          <div className="desktop-only:w-1/3">
             <TasksAssigned count={tasks?.length} />
           </div>
-          <div className="w-1/3">
+          <div className="desktop-only:w-1/3">
             <ActiveProjects />
           </div>
-          <div className="w-1/3">
+          <div className="desktop-only:w-1/3">
             <ArchivedProjects />
           </div>
         </div>
 
-        <div className="flex gap-4">
-          <div className="flex flex-col flex-1 gap-4">
-            <div className="flex flex-wrap gap-4">
-              <TaskStatusSnapshot tasks={tasks} />
-              <TaskPrioritySnapshot tasks={tasks} />
-            </div>
+        <div className="flex gap-2 mobile-only:flex-col">
+          <div className="flex flex-col gap-2">
+            <TasksLineChart tasks={tasks} />
+            <TaskStatusSnapshot tasks={tasks} />
+            <TaskPrioritySnapshot tasks={tasks} />
           </div>
-          <UpcomingTasks tasks={tasks} />
+
+          <div className="flex flex-col flex-1 w-full h-full gap-2 ">
+            <UpcomingTasks tasks={tasks} />
+          </div>
         </div>
       </main>
     </>

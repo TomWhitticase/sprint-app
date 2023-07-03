@@ -19,7 +19,7 @@ export default function Home() {
 
       <ProjectLinkBar links={[]} current={"Projects"} />
 
-      <main className="flex flex-col items-start justify-start w-full h-full gap-4 p-4">
+      <main className="flex flex-col items-start justify-start w-full h-full gap-2 p-4">
         <div className="flex items-center justify-between w-full gap-2">
           <Input
             bg={"white"}
@@ -33,7 +33,7 @@ export default function Home() {
             New Project
           </Button>
         </div>
-        <div className="flex flex-wrap items-start justify-start gap-4">
+        <div className="flex flex-wrap items-start justify-start gap-2">
           {projects?.map(
             (
               project: Project & {

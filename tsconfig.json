@@ -18,14 +18,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "src/components/chat/AudioRecorder.jsx",
-    "src/components/description/DateCreated.jsx",
-    "src/components/description/Description.jsx",
-    "src/components/description/DescriptionInfo.jsx"
-, "tailwind.config.js"  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "tailwind.config.js"],
   "exclude": ["node_modules"]
 }

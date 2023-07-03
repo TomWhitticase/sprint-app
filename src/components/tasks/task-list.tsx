@@ -99,7 +99,7 @@ export default function TaskList({ tasks }: TaskListProps) {
 
   return (
     <>
-      <div className="flex flex-wrap items-center justify-start w-full gap-4 ">
+      <div className="flex flex-wrap items-center justify-start w-full gap-2">
         <div className="flex flex-col h-24 gap-2 p-2 bg-white border-2 rounded-lg">
           <Text>Filter by priority</Text>
 

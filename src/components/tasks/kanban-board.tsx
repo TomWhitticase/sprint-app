@@ -138,7 +138,7 @@ export default function KanbanBoard({ tasks, updateTask }: KanbanBoardProps) {
   };
 
   return (
-    <div className="flex w-full h-full select-none mobile-only:flex-col">
+    <div className="flex w-full h-full gap-0 gap-2 select-none mobile-only:flex-col">
       <div
         className={`fixed pointer-events-none z-[100] opacity-0 ${
           draggingTask && "opacity-100"
@@ -167,7 +167,7 @@ export default function KanbanBoard({ tasks, updateTask }: KanbanBoardProps) {
         return (
           <div
             key={index}
-            className={`flex flex-col h-full desktop-only:w-1/4 p-2 gap-2 rounded  ${
+            className={`flex flex-col h-full desktop-only:w-1/4  gap-2 rounded  ${
               overColumn === taskCategory && draggingTask ? "bg-slate-200" : ""
             }`}
             onMouseUp={() => handleMouseUp(taskCategory)}
