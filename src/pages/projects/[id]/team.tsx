@@ -5,6 +5,7 @@ import UserAvatar from "@/components/users/user-avatar";
 import { useInvites } from "@/hooks/use-invites";
 import { useProject } from "@/hooks/use-project";
 import {
+  Badge,
   Button,
   Modal,
   ModalContent,
@@ -109,13 +110,6 @@ export default function TeamPage({ id }: TeamPageProps) {
       />
       <main className="flex flex-col w-full h-full gap-2 p-4">
         <div className="flex flex-col items-start justify-start gap-2 p-4 bg-white border-2 rounded-lg ">
-          <h1 className="text-xl font-bold">Team Leader</h1>
-          <span className="flex items-center justify-start w-full gap-2 ">
-            <UserAvatar user={project?.leader} />
-            {project?.leader.name}
-          </span>
-        </div>
-        <div className="flex flex-col items-start justify-start gap-2 p-4 bg-white border-2 rounded-lg ">
           <span className="flex items-center justify-between w-full">
             <h1 className="text-xl font-bold">Team Members</h1>
 
@@ -124,45 +118,58 @@ export default function TeamPage({ id }: TeamPageProps) {
             </Button>
           </span>
           <div className="flex flex-col items-start justify-start w-full gap-2">
-            {project?.members.map((member: User, i: number) => (
-              <span
-                key={i}
-                className="flex items-center justify-between w-full gap-2"
-              >
-                <span className="flex justify-start flex-1 w-full gap-2 items-cener">
-                  <UserAvatar user={member} />
-                  {member.name}
-                </span>
-                <Popover
-                  isOpen={activePopover === member.id}
-                  onClose={() => setActivePopover(null)}
+            <span className="flex items-center justify-start w-full gap-2 ">
+              <UserAvatar user={project?.leader} />
+              {project?.leader.name}
+              <Badge colorScheme="green">Leader</Badge>
+            </span>
+            {project?.members
+              .filter(({ id }) => id !== project.leader.id)
+              .map((member: User, i: number) => (
+                <span
+                  key={i}
+                  className="flex items-center justify-between w-full gap-2"
                 >
-                  <PopoverTrigger>
-                    <Button
-                      variant={"ghost"}
-                      onClick={() => setActivePopover(member.id)}
+                  <span className="flex items-center justify-start flex-1 w-full gap-2">
+                    <UserAvatar user={member} />
+                    {member.name}
+                  </span>
+                  {member.id !== project.leader.id && (
+                    <Popover
+                      isOpen={activePopover === member.id}
+                      onClose={() => setActivePopover(null)}
                     >
-                      <AiOutlineEllipsis />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <PopoverBody>
-                      <span className="flex items-center justify-between w-full gap-2">
-                        <span>Remove user</span>
+                      <PopoverTrigger>
                         <Button
-                          onClick={() => {
-                            if (!removing) handleRemoveUser(member.id);
-                          }}
-                          variant={"black"}
+                          variant={"ghost"}
+                          onClick={() => setActivePopover(member.id)}
                         >
-                          {removing ? <Spinner /> : <GiPistolGun />}
+                          <AiOutlineEllipsis />
                         </Button>
-                      </span>
-                    </PopoverBody>
-                  </PopoverContent>
-                </Popover>
-              </span>
-            ))}
+                      </PopoverTrigger>
+                      <PopoverContent w={"min"}>
+                        <PopoverBody w={"min"}>
+                          <Button
+                            isLoading={removing}
+                            disabled={removing}
+                            onClick={() => {
+                              if (
+                                confirm(
+                                  `Are you sure you want to remove ${member.name} from the project?`
+                                )
+                              )
+                                handleRemoveUser(member.id);
+                            }}
+                            variant={"ghost"}
+                          >
+                            <GiCancel className="mr-2" /> Remove User
+                          </Button>
+                        </PopoverBody>
+                      </PopoverContent>
+                    </Popover>
+                  )}
+                </span>
+              ))}
           </div>
         </div>
         <div className="flex flex-col items-start justify-start gap-4 p-4 bg-white border-2 rounded-lg ">
@@ -200,23 +207,23 @@ export default function TeamPage({ id }: TeamPageProps) {
                     <AiOutlineEllipsis />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent>
+                <PopoverContent w={"min"}>
                   <PopoverBody>
-                    <span className="flex items-center justify-between w-full gap-2">
-                      <span>Cancel Invite</span>
-                      <Button
-                        onClick={() => {
-                          if (!deletingInvite) handleDeleteInvite(invite.id);
-                        }}
-                        className={`
-                  ${deletingInvite ? "cursor-not-allowed" : ""}
-                `}
-                        variant={"black"}
-                        size={"sm"}
-                      >
-                        {deletingInvite ? <Spinner /> : <GiCancel />}
-                      </Button>
-                    </span>
+                    <Button
+                      variant={"ghost"}
+                      onClick={() => {
+                        if (
+                          confirm(
+                            `Are you sure you want to cancel ${invite.user.name}'s invitation?`
+                          )
+                        )
+                          handleDeleteInvite(invite.id);
+                      }}
+                      isLoading={deletingInvite}
+                      disabled={deletingInvite}
+                    >
+                      <GiCancel className="mr-2" /> Cancel Invite
+                    </Button>
                   </PopoverBody>
                 </PopoverContent>
               </Popover>

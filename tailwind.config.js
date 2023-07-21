@@ -14,6 +14,7 @@ module.exports = {
     extend: {
       colors: {
         "system-grey": {
+          extraLight: "#4F506E",
           veryLight: "#343541",
           light: "#2A2B32",
           DEFAULT: "#202123",

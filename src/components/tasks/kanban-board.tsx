@@ -53,6 +53,7 @@ export default function KanbanBoard({ tasks, updateTask }: KanbanBoardProps) {
   const [draggingTask, setDraggingTask] = useState("");
 
   const dragRef = useRef<HTMLDivElement>(null);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   const categories = [
     { name: "To-do", style: "bg-todo-red text-todo-red-text" },
@@ -97,6 +98,7 @@ export default function KanbanBoard({ tasks, updateTask }: KanbanBoardProps) {
         const height = dragRef.current.offsetHeight;
         dragRef.current.style.top = `${e.clientY - height / 2}px`;
         dragRef.current.style.left = `${e.clientX - width / 2}px`;
+        dragRef.current.style.transform = `translate(${-dragOffset.x}px, ${-dragOffset.y}px)`;
       }
     };
 
@@ -107,7 +109,7 @@ export default function KanbanBoard({ tasks, updateTask }: KanbanBoardProps) {
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, []);
+  }, [dragOffset]);
 
   const handleMouseUp = async (category: keyof typeof initialTasksState) => {
     if (
@@ -138,7 +140,7 @@ export default function KanbanBoard({ tasks, updateTask }: KanbanBoardProps) {
   };
 
   return (
-    <div className="flex w-full h-full gap-0 gap-2 select-none mobile-only:flex-col">
+    <div className="flex w-full h-full gap-2 select-none mobile-only:flex-col">
       <div
         className={`fixed pointer-events-none z-[100] opacity-0 ${
           draggingTask && "opacity-100"
@@ -167,7 +169,7 @@ export default function KanbanBoard({ tasks, updateTask }: KanbanBoardProps) {
         return (
           <div
             key={index}
-            className={`flex flex-col h-full desktop-only:w-1/4  gap-2 rounded  ${
+            className={`flex flex-col h-full desktop-only:w-72  gap-2 rounded  ${
               overColumn === taskCategory && draggingTask ? "bg-slate-200" : ""
             }`}
             onMouseUp={() => handleMouseUp(taskCategory)}
@@ -189,7 +191,18 @@ export default function KanbanBoard({ tasks, updateTask }: KanbanBoardProps) {
                       draggingTask === taskId ? "opacity-30" : undefined
                     }
                     key={taskId}
-                    onDrag={() => setDraggingTask(taskId)}
+                    onDrag={(e) => {
+                      const centerX = e.currentTarget.offsetWidth / 2;
+                      const centerY = e.currentTarget.offsetHeight / 2;
+
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const offsetX = e.clientX - (rect.left + centerX);
+                      const offsetY = e.clientY - (rect.top + centerY);
+
+                      console.log(offsetX, offsetY);
+                      setDragOffset({ x: offsetX, y: offsetY });
+                      setDraggingTask(taskId);
+                    }}
                     task={
                       task as Task & {
                         assignees: User[];

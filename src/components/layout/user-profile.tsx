@@ -9,7 +9,7 @@ export default function UserProfile() {
   const router = useRouter();
   return (
     <Menu>
-      <MenuButton className="flex flex-row items-center justify-between gap-2 px-4 py-2 transition-all duration-300 rounded-lg text-system-grey-text hover:bg-system-blue-light">
+      <MenuButton className="flex flex-row items-center justify-between gap-2 px-2 py-2 transition-all duration-300 rounded-lg text-system-grey-text hover:bg-system-blue-light">
         <div className="flex flex-row items-center justify-between gap-2">
           <UserAvatar isCurrentUser />
           <div className="flex items-center justify-start flex-1">

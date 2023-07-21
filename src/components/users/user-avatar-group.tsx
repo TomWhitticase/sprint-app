@@ -6,11 +6,13 @@ import UserAvatar from "./user-avatar";
 export interface UserAvatarGroupProps {
   users: User[];
   max?: number;
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 }
 
 export default function UserAvatarGroup({
   users,
   max = 2,
+  size = "sm",
 }: UserAvatarGroupProps) {
   return (
     <Tooltip
@@ -23,12 +25,13 @@ export default function UserAvatarGroup({
       }
       aria-label="A tooltip"
     >
-      <AvatarGroup size="sm" max={max}>
+      <AvatarGroup size={size} max={max}>
         {users.map(
           (
             user // map over the users array
           ) => (
             <Avatar
+              size={size}
               key={user.id}
               name={user.name}
               src={user.avatarUrl as string}

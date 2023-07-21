@@ -1,21 +1,14 @@
-import {
-  Button,
-  Divider,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
 import { Project, User } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
 import UserAvatar from "../users/user-avatar";
 import UserAvatarGroup from "../users/user-avatar-group";
+import { Progress, Text } from "@chakra-ui/react";
+import { FaTasks, FaFileAlt } from "react-icons/fa";
+import { IoMdChatboxes } from "react-icons/io";
 
 export interface ProjectCardProps {
-  project: Project & { members: User[]; leader: User };
+  project: any;
   onClick?: () => void;
 }
 export default function ProjectCard({ project, onClick }: ProjectCardProps) {
@@ -28,32 +21,74 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
       router.push(`/projects/${project.id}`);
     }
   };
+
+  const projectProgress =
+    (project.tasks.filter(({ status }) => status === "COMPLETED").length /
+      project.tasks.length) *
+      100 || 0;
+  const completedCount = project.tasks.filter(
+    ({ status }) => status === "COMPLETED"
+  ).length;
+
   return (
     <div
-      className="flex flex-col p-4 bg-white border-2 rounded-lg cursor-pointer "
+      className="flex flex-col gap-2 p-4 bg-white border-2 rounded-lg cursor-pointer "
       onClick={handleClick}
     >
-      <h1 className="text-xl font-bold">{project.name}</h1>
+      <div className="flex items-center justify-start w-full gap-2">
+        <h1 className="flex-1 w-full text-xl font-bold">{project.name}</h1>
+        <UserAvatar user={project.leader} />
+        <UserAvatarGroup
+          users={project.members.filter(({ id }) => id !== project.leaderId)}
+        />
+      </div>
       <p className="text-lg">{project.description}</p>
+      <p className="text-slate-400">
+        Started {new Date(project.createdAt).toLocaleDateString("en-UK")}
+      </p>
+      <div className="flex flex-col items-end justify-center gap-1">
+        <div className="text-slate-500">
+          {completedCount} / {project.tasks.length} tasks completed
+        </div>
+        <div className="flex items-center justify-end w-full gap-2">
+          <Text color="blue.500" as="b">
+            {projectProgress.toFixed(0)}%
+          </Text>
+          <div className="flex-1">
+            <Progress value={projectProgress} />
+          </div>
+        </div>
+      </div>
 
-      <Table size="sm" colorScheme="blackAlpha" className="mt-4 bg-white">
-        <Thead>
-          <Tr>
-            <Th>Leader</Th>
-            <Th>Members</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          <Tr>
-            <Td>
-              <UserAvatar user={project.leader} />
-            </Td>
-            <Td>
-              <UserAvatarGroup users={project.members} max={5} />
-            </Td>
-          </Tr>
-        </Tbody>
-      </Table>
+      <div className="flex items-center justify-start w-full gap-2">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/projects/${project.id}/tasks`);
+          }}
+          className="flex items-center justify-center gap-2 px-2 py-1 text-sm font-bold transition-all duration-300 ease-in-out rounded bg-slate-200 hover:text-orange-500 text-slate-500"
+        >
+          <FaTasks /> {project.tasks.length} tasks
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/projects/${project.id}/discussions`);
+          }}
+          className="flex items-center justify-center gap-2 px-2 py-1 text-sm font-bold transition-all duration-300 ease-in-out rounded bg-slate-200 hover:text-orange-500 text-slate-500"
+        >
+          <IoMdChatboxes /> {project.posts.length} Discussions
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            router.push(`/projects/${project.id}/resources`);
+          }}
+          className="flex items-center justify-center gap-2 px-2 py-1 text-sm font-bold transition-all duration-300 ease-in-out rounded bg-slate-200 hover:text-orange-500 text-slate-500"
+        >
+          <FaFileAlt /> {project.resources.length} Resources
+        </button>
+      </div>
     </div>
   );
 }

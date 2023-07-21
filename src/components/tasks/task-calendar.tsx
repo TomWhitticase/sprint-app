@@ -1,24 +1,43 @@
-import React from "react";
-import {
-  Gantt,
-  EventOption,
-  StylingOption,
-  ViewMode,
-  DisplayOption,
-} from "gantt-task-react";
+import React, { useEffect, useState } from "react";
+import { Gantt, ViewMode, DisplayOption } from "gantt-task-react";
 import "gantt-task-react/dist/index.css";
 import { Task, User } from "@prisma/client";
-import { Button } from "@chakra-ui/react";
+import { Button, Checkbox } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { TodoItem } from "./task-card";
+import { RangeDatepicker } from "chakra-dayzed-datepicker";
+import DateRangeInput from "./date-range-input";
 
 export interface TaskCalendarProps {
   tasks: (Task & { assignees: User[] })[];
 }
 export default function TaskCalendar(props: TaskCalendarProps) {
-  const [viewMode, setViewMode] = React.useState<ViewMode>(ViewMode.Day);
+  const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.Day);
+
   const router = useRouter();
   let columnWidth = 65;
+  const [filteredTasks, setFilteredTasks] = useState(props.tasks);
+  const firstTaskDate = new Date(
+    Math.min.apply(
+      null,
+      props.tasks.map((task) => new Date(task.startDate))
+    )
+  );
+  const lastTaskDate = new Date(
+    Math.max.apply(
+      null,
+      props.tasks.map((task) => new Date(task.endDate))
+    )
+  );
+
+  const [selectedDates, setSelectedDates] = useState<Date[]>([
+    firstTaskDate,
+    lastTaskDate,
+  ]);
+  const [
+    includeCrossesOverDateBoundaries,
+    setIncludeCrossesOverDateBoundaries,
+  ] = useState<boolean>(false);
   if (viewMode === ViewMode.Year) {
     columnWidth = 350;
   } else if (viewMode === ViewMode.Month) {
@@ -41,6 +60,27 @@ export default function TaskCalendar(props: TaskCalendarProps) {
     }
   };
 
+  // when selected dates change, filter tasks
+  useEffect(() => {
+    if (!props.tasks) return;
+    const filtered = props.tasks.filter((task) => {
+      if (includeCrossesOverDateBoundaries)
+        return (
+          task.startDate &&
+          task.endDate &&
+          new Date(task.startDate) <= selectedDates[1] &&
+          new Date(task.endDate) >= selectedDates[0]
+        );
+      return (
+        task.startDate &&
+        task.endDate &&
+        new Date(task.startDate) >= selectedDates[0] &&
+        new Date(task.endDate) <= selectedDates[1]
+      );
+    });
+    setFilteredTasks(filtered);
+  }, [includeCrossesOverDateBoundaries, props.tasks, selectedDates]);
+
   if (!props.tasks || props.tasks.length < 1)
     return (
       <div className="flex items-center justify-center w-full">
@@ -51,8 +91,11 @@ export default function TaskCalendar(props: TaskCalendarProps) {
     );
 
   return (
-    <div className="relative flex flex-col gap-4">
-      <div className="absolute -top-10 right-2 flex flex-row gap-4 z-[10]">
+    <div className="relative flex flex-col gap-2 p-2 bg-white border-2 rounded-lg">
+      <div
+        id="control-bar"
+        className="flex items-center justify-start w-full gap-2"
+      >
         <Button size={"sm"} variant={"white"} onClick={cycleViewMode}>
           {viewMode === ViewMode.Day
             ? "Day"
@@ -63,28 +106,51 @@ export default function TaskCalendar(props: TaskCalendarProps) {
             : "Year"}{" "}
           {" View"}
         </Button>
+
+        <div className="">
+          <DateRangeInput
+            selectedDates={selectedDates}
+            onDateChange={setSelectedDates}
+          />
+        </div>
+        <Checkbox
+          isChecked={includeCrossesOverDateBoundaries}
+          onChange={(e) => {
+            setIncludeCrossesOverDateBoundaries(e.target.checked);
+          }}
+        >
+          <span className="text-sm">
+            Include tasks that cross over date boundaries
+          </span>
+        </Checkbox>
       </div>
 
-      <Gantt
-        onClick={(t) => {
-          const task = props.tasks.find((task) => task.id === t.id);
-          if (!task) return;
-          router.push("/projects/" + task.projectId + "/tasks/" + task.id);
-        }}
-        columnWidth={columnWidth}
-        viewMode={viewMode}
-        listCellWidth={""}
-        tasks={formatTasks(props) as any}
-      />
+      {filteredTasks?.length === 0 ? (
+        <div className="flex items-center justify-center p-4 bg-white border-2 rounded-lg">
+          No tasks to display
+        </div>
+      ) : (
+        <Gantt
+          onClick={(t) => {
+            const task = props.tasks.find((task) => task.id === t.id);
+            if (!task) return;
+            router.push("/projects/" + task.projectId + "/tasks/" + task.id);
+          }}
+          columnWidth={columnWidth}
+          viewMode={viewMode}
+          listCellWidth={""}
+          tasks={formatTasks(filteredTasks || []) as any}
+        />
+      )}
     </div>
   );
 }
-function formatTasks(props: TaskCalendarProps) {
-  return props.tasks
-    .filter((t) => {
+function formatTasks(tasks: any) {
+  return tasks
+    .filter((t: any) => {
       return t.startDate && t.endDate;
     })
-    .map((t) => {
+    .map((t: any) => {
       return {
         start: new Date(t.startDate as Date),
         end: new Date(t.endDate as Date),

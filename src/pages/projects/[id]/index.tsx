@@ -157,6 +157,35 @@ export default function ProjectPage({ id }: ProjectPageProps) {
               className="w-full"
             />
           </div>
+          <div className="flex items-start justify-end w-full gap-2">
+            <Button
+              variant="black"
+              onClick={() => {
+                if (!leaving) handleLeave();
+              }}
+              isDisabled={leaving}
+              isLoading={leaving}
+            >
+              {leaving ? "Leaving..." : "Leave Project"}
+            </Button>
+
+            <Button
+              variant="white"
+              onClick={handleArchive}
+              isDisabled={archiving}
+              isLoading={archiving}
+            >
+              {project?.archived ? "Unarchive Project" : "Archive Project"}
+            </Button>
+            <Button
+              colorScheme="red"
+              onClick={handleDelete}
+              isDisabled={deleting}
+              isLoading={deleting}
+            >
+              {deleting ? "Deleting..." : "Delete Project"}
+            </Button>
+          </div>
         </div>
         <div className="flex flex-col items-start justify-start gap-2 p-4 bg-white border-2 rounded-lg">
           <h1 className="text-xl font-bold">Project Links</h1>
@@ -193,36 +222,6 @@ export default function ProjectPage({ id }: ProjectPageProps) {
             <TaskPrioritySnapshot tasks={project.tasks} />
           </div>
           <UpcomingTasks tasks={project.tasks} />
-        </div>
-        <div className="flex flex-col items-start justify-start gap-2 p-4 bg-white border-2 rounded-lg ">
-          <h1 className="text-xl font-bold">Danger Zone</h1>
-          <Button
-            variant="black"
-            onClick={() => {
-              if (!leaving) handleLeave();
-            }}
-            isDisabled={leaving}
-            isLoading={leaving}
-          >
-            {leaving ? "Leaving..." : "Leave Project"}
-          </Button>
-
-          <Button
-            variant="white"
-            onClick={handleArchive}
-            isDisabled={archiving}
-            isLoading={archiving}
-          >
-            {project?.archived ? "Unarchive Project" : "Archive Project"}
-          </Button>
-          <Button
-            colorScheme="red"
-            onClick={handleDelete}
-            isDisabled={deleting}
-            isLoading={deleting}
-          >
-            {deleting ? "Deleting..." : "Delete Project"}
-          </Button>
         </div>
       </main>
     </>

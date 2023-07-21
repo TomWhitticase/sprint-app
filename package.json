@@ -1,5 +1,5 @@
 {
-  "name": "team-project-part-3",
+  "name": "sprint",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -45,6 +45,7 @@
     "react": "18.2.0",
     "react-datepicker": "^4.14.1",
     "react-dom": "18.2.0",
+    "react-flip-move": "^3.0.5",
     "react-hot-toast": "^2.4.0",
     "react-loading": "^2.0.3",
     "react-nprogress": "^0.1.6",

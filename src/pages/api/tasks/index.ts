@@ -37,6 +37,7 @@ const getTasks = async (
             name: true,
           },
         },
+        comments: true,
       },
     });
     res.status(200).json(tasks);

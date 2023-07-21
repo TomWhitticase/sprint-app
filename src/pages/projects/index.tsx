@@ -33,17 +33,20 @@ export default function Home() {
             New Project
           </Button>
         </div>
-        <div className="flex flex-wrap items-start justify-start gap-2">
-          {projects?.map(
-            (
-              project: Project & {
-                leader: User;
-                members: User[];
-              }
-            ) => (
-              <ProjectCard key={project.id} project={project} />
-            )
+        <div className="flex flex-wrap items-start justify-start w-full">
+          {projects?.length === 0 && (
+            <div className="flex flex-col items-center justify-center w-full gap-2 p-4 bg-white border-2 rounded-lg">
+              <h1>You have no projects</h1>
+            </div>
           )}
+          {projects?.map((project) => (
+            <div
+              key={project.id}
+              className="p-2 desktop-only:w-1/2 mobile-only:w-full"
+            >
+              <ProjectCard project={project} />
+            </div>
+          ))}
         </div>
       </main>
     </>

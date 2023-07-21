@@ -99,9 +99,9 @@ export default function TaskList({ tasks }: TaskListProps) {
 
   return (
     <>
-      <div className="flex flex-wrap items-center justify-start w-full gap-2">
-        <div className="flex flex-col h-24 gap-2 p-2 bg-white border-2 rounded-lg">
-          <Text>Filter by priority</Text>
+      <div className="flex flex-wrap items-start justify-start w-full gap-2 bg-white border-2 rounded-lg h-18">
+        <div className="flex flex-col gap-1 p-2 ">
+          <span className="text-xs">Filter by priority</span>
 
           <CheckboxGroup
             value={selectedPriorities}
@@ -132,8 +132,8 @@ export default function TaskList({ tasks }: TaskListProps) {
             </Stack>
           </CheckboxGroup>
         </div>
-        <div className="flex flex-col h-24 gap-2 p-2 bg-white border-2 rounded-lg">
-          <Text>Filter by status</Text>
+        <div className="flex flex-col gap-1 p-2 ">
+          <span className="text-xs">Filter by status</span>
           <CheckboxGroup
             value={selectedStatuses}
             onChange={(value) => setSelectedStatuses(value as TaskStatus[])}
@@ -170,10 +170,11 @@ export default function TaskList({ tasks }: TaskListProps) {
             </Stack>
           </CheckboxGroup>
         </div>
-        <div className="flex flex-col h-24 gap-2 p-2 bg-white border-2 rounded-lg">
-          <Text>Sort tasks</Text>
+        <div className="flex flex-col gap-1 p-2 ">
+          <span className="text-xs">Sort tasks</span>
           <div className="flex gap-2">
             <Select
+              size="sm"
               className=""
               bg={"white"}
               onChange={(e) => setSortAttribute(e.target.value)}
@@ -186,7 +187,8 @@ export default function TaskList({ tasks }: TaskListProps) {
             </Select>
 
             <Button
-              className="w-64"
+              size={"sm"}
+              className="w-48"
               variant={"black"}
               onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
             >

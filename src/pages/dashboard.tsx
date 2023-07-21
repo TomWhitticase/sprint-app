@@ -19,11 +19,10 @@ export default function DashboardPage() {
     <>
       <Head title="Dashboard" />
       <ProjectLinkBar links={[]} current={"Dashboard"} />
+      <div className="px-4 pt-2 text-4xl">
+        Welcome back, <span className="font-bold">{session?.user?.name}</span>
+      </div>
       <main className="flex flex-col w-full h-full gap-2 p-4">
-        <div className="py-1 text-4xl">
-          Welcome back, <span className="font-bold">{session?.user?.name}</span>
-        </div>
-
         <div className="flex w-full gap-2 mobile-only:flex-col">
           <div className="desktop-only:w-1/3">
             <TasksAssigned count={tasks?.length} />

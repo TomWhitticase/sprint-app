@@ -126,29 +126,3 @@ export default apiHandler({
   POST: { handler: registerUser, requireAuth: false },
 });
 
-//for reference
-// model registrationData {
-//   id        String   @id @unique @default(cuid())
-//   email     String
-//   password  String
-//   name      String
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt @default(now())
-//   confirmationToken String
-// }
-// model User {
-//   id            String      @id @unique @default(cuid())
-//   email         String      @unique
-//   password      String
-//   name          String
-//   avatarUrl     String?
-//   createdAt     DateTime    @default(now())
-//   updatedAt     DateTime    @updatedAt @default(now())
-//   projects      Project[]
-//   leadProjects  Project[] @relation("ProjectLeader")
-//   invites       ProjectInvite[]
-//   tasks         Task[]
-//   taskComments  TaskComment[]
-//   posts         Post[]
-//   postComments  PostComment[]
-// }

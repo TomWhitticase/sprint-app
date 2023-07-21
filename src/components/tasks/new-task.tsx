@@ -204,10 +204,11 @@ export default function NewTask({ createTask, project }: NewTaskProps) {
               onDateChange={setSelectedDates}
             />
           </FormControl>
-
-          <Button type="submit" variant={"black"}>
-            Create Task
-          </Button>
+          <div className="flex items-center justify-end w-full">
+            <Button type="submit" variant={"black"}>
+              Create Task
+            </Button>
+          </div>
         </VStack>
       </form>
     </Box>

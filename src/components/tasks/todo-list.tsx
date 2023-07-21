@@ -17,6 +17,26 @@ export default function TodoList({ todos, setTodos }: TodoListProps) {
   };
   return (
     <>
+      <div className="flex items-center justify-start gap-4">
+        <Input
+          value={newTodoInput}
+          onChange={(e) => setNewTodoInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && newTodoInput !== "") {
+              handleAddTodo();
+            }
+          }}
+          variant={"flushed"}
+          placeholder="Add a new todo..."
+        />
+        <Button
+          onClick={handleAddTodo}
+          variant="black"
+          isDisabled={newTodoInput === ""}
+        >
+          Add
+        </Button>
+      </div>
       <div className="flex flex-col gap-2 p-2 overflow-auto h-60">
         {todos.map((todo, index) => (
           <div
@@ -54,26 +74,6 @@ export default function TodoList({ todos, setTodos }: TodoListProps) {
             </button>
           </div>
         ))}
-      </div>
-      <div className="flex items-center justify-start gap-4">
-        <Input
-          value={newTodoInput}
-          onChange={(e) => setNewTodoInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && newTodoInput !== "") {
-              handleAddTodo();
-            }
-          }}
-          variant={"flushed"}
-          placeholder="Add a new todo..."
-        />
-        <Button
-          onClick={handleAddTodo}
-          variant="black"
-          isDisabled={newTodoInput === ""}
-        >
-          Add
-        </Button>
       </div>
     </>
   );

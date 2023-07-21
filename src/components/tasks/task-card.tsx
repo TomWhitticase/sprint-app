@@ -21,11 +21,11 @@ interface TaskCardProps {
     assignees: User[];
     comments: TaskComment[];
   };
-  onDrag: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDrag?: (e: React.DragEvent<HTMLDivElement>) => void;
 }
 export default function TaskCard({
   task,
-  onDrag,
+  onDrag = () => {},
   additionalClasses,
 }: TaskCardProps) {
   const router = useRouter();
@@ -54,47 +54,48 @@ export default function TaskCard({
         router.push("/projects/" + task.projectId + "/tasks/" + task.id);
       }}
       className={
-        "flex flex-col gap-2 p-4 bg-white border-2 rounded cursor-pointer " +
+        "flex flex-col gap-2 p-4 bg-white border-2 rounded cursor-pointer w-72 " +
         additionalClasses
       }
     >
-      <div className="flex items-center justify-between gap-2 h-min">
-        <h1 className="text-lg font-bold">{task.name}</h1>
+      <div className="flex items-center justify-between gap-0 h-min">
+        <h1 className="w-full text-lg font-bold">{task.name}</h1>
         <div className="flex items-center justify-end w-full gap-1">
-          <UserAvatarGroup users={task.assignees} />
-        </div>
-        <Tooltip
-          label={
-            task.priority.charAt(0).toUpperCase() +
-            task.priority.slice(1).toLowerCase() +
-            " Priority"
-          }
-          aria-label="priority"
-        >
-          <span
-            className="p-1"
-            style={{
-              color:
-                task.priority === "HIGH"
-                  ? "red"
-                  : task.priority === "MEDIUM"
-                  ? "goldenrod"
-                  : "green",
-            }}
+          <UserAvatarGroup size="sm" users={task.assignees} />
+
+          <Tooltip
+            label={
+              task.priority.charAt(0).toUpperCase() +
+              task.priority.slice(1).toLowerCase() +
+              " Priority"
+            }
+            aria-label="priority"
           >
-            <TbFlagFilled />
-          </span>
-        </Tooltip>
+            <span
+              className="p-1"
+              style={{
+                color:
+                  task.priority === "HIGH"
+                    ? "red"
+                    : task.priority === "MEDIUM"
+                    ? "goldenrod"
+                    : "green",
+              }}
+            >
+              <TbFlagFilled />
+            </span>
+          </Tooltip>
+        </div>
       </div>
 
       <Divider borderWidth={1} />
 
       <div>
-        <h1>{task.description}</h1>
+        <p className="text-sm">{task.description}</p>
       </div>
 
       {totalTodos > 0 && (
-        <>
+        <div className="flex flex-col">
           <div className="flex items-center justify-center gap-2 ">
             <Progress
               colorScheme="green"
@@ -105,29 +106,37 @@ export default function TaskCard({
               {completedTodos}/{totalTodos}
             </Text>
           </div>
-          <div className="flex flex-col items-start justify-center gap-2 text-sm">
+          <div className="flex flex-col items-start justify-center gap-0 text-sm">
             {(task.todos as any as TodoItem[]).map((todo, i) => (
-              <div key={i} className="flex items-center justify-between gap-2">
+              <div key={i} className="flex items-center justify-between gap-0">
                 <div className="">
                   {todo.completed ? (
-                    <BiCheckboxChecked size={25} />
+                    <div className="text-green-600">
+                      <BiCheckboxChecked size={25} />
+                    </div>
                   ) : (
                     <BiCheckbox size={25} />
                   )}
                 </div>
                 <span className="relative">
-                  {todo.completed && (
-                    <div className="absolute left-0 right-0 w-full h-[2px]  bg-black top-1/2"></div>
+                  {todo.completed ? (
+                    <div className="text-green-600">{todo.name}</div>
+                  ) : (
+                    <div className="text-black">{todo.name}</div>
                   )}
-                  {todo.name}
                 </span>
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
       <div className="flex items-center justify-between gap-2 text-[0.7rem]">
-        {task.endDate && <DeadlineBadge deadline={task.endDate} />}
+        {task.endDate && (
+          <DeadlineBadge
+            completed={task.status === "COMPLETED"}
+            deadline={task.endDate}
+          />
+        )}
         <span className="flex items-center justify-center gap-1 px-2 py-1 rounded bg-slate-100">
           <BiComment /> {task.comments.length} comment
           {task.comments.length !== 1 && "s"}

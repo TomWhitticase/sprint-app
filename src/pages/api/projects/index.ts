@@ -154,6 +154,9 @@ const getProjects = async (
                 avatarUrl: true,
               },
             },
+            tasks: true,
+            posts: true,
+            resources: true,
           },
         });
         break;
@@ -177,6 +180,9 @@ const getProjects = async (
                 avatarUrl: true,
               },
             },
+            tasks: true,
+            posts: true,
+            resources: true,
           },
         });
         break;
@@ -203,6 +209,9 @@ const getProjects = async (
                 avatarUrl: true,
               },
             },
+            tasks: true,
+            posts: true,
+            resources: true,
           },
         });
     }
