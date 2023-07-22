@@ -42,7 +42,7 @@ export default function TasksPage({ id }: TasksPageProps) {
     });
   };
 
-  if (projectIsLoading || tasksIsLoading)
+  if (projectIsLoading || tasksIsLoading || !project || !tasks)
     return (
       <>
         <Head title={"Loading..."} />

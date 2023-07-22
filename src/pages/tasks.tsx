@@ -1,15 +1,14 @@
+import React from "react";
 import Head from "@/components/Head";
 import ProjectLinkBar from "@/components/projects/project-link-bar";
 import TaskList from "@/components/tasks/task-list";
 import { useProjects } from "@/hooks/use-projects";
 import { useTasks } from "@/hooks/use-tasks";
-import React, { useState } from "react";
 import {
   Button,
   Popover,
   PopoverBody,
   PopoverContent,
-  PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
   Select,
@@ -27,12 +26,16 @@ export default function TasksPage() {
   const { tasks, tasksIsLoading, updateTask } = useTasks(undefined, true);
   const { projects } = useProjects();
   const router = useRouter();
-  const [selectedProject, setSelectedProject] = useState<string | undefined>(
-    undefined
-  );
+  const [selectedProject, setSelectedProject] = React.useState<
+    string | undefined
+  >(undefined);
 
-  const filteredTasks = tasks?.filter((task) =>
-    selectedProject ? task.projectId === selectedProject : true
+  const filteredTasks = React.useMemo(
+    () =>
+      tasks?.filter((task) =>
+        selectedProject ? task.projectId === selectedProject : true
+      ),
+    [tasks, selectedProject]
   );
 
   const viewMode = router.query.viewMode || "grid";

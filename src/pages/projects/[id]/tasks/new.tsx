@@ -15,7 +15,7 @@ export default function NewTaskPage({ id }: TasksPageProps) {
   const { tasks, createTask, tasksIsLoading, updateTask, deleteTask } =
     useTasks(id);
 
-  if (projectIsLoading || tasksIsLoading) {
+  if (projectIsLoading || tasksIsLoading || !project || !tasks) {
     return (
       <>
         <Head title={"Loading..."} />

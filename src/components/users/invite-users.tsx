@@ -22,7 +22,7 @@ export default function InviteUsers({ projectId, onClose }: InviteUsersProps) {
     page,
     limit,
     searchQuery,
-    project?.members.map((m: User) => m.id) || []
+    project?.members.map((m: User) => m.id) as any
   );
 
   const { invites, createInvite, projectInvites } = useInvites(projectId);

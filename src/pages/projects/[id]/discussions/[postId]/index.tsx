@@ -31,7 +31,7 @@ export default function PostPage({ id, postId }: PostPageProps) {
     setCommentContentInput("");
   };
 
-  if (projectIsLoading || postIsLoading) return <></>;
+  if (projectIsLoading || postIsLoading || project === undefined) return <></>;
 
   return (
     <>

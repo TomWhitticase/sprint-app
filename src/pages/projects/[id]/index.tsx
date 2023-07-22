@@ -54,7 +54,7 @@ export default function ProjectPage({ id }: ProjectPageProps) {
     if (
       !confirm(
         `Are you sure you want to ${
-          project.archived ? "unarchive" : "archive"
+          project?.archived ? "unarchive" : "archive"
         } this project?`
       )
     ) {
@@ -65,7 +65,7 @@ export default function ProjectPage({ id }: ProjectPageProps) {
     try {
       await updateProject({
         projectId: id,
-        archived: !project.archived,
+        archived: !project?.archived,
       });
 
       router.push("/projects");
@@ -95,7 +95,7 @@ export default function ProjectPage({ id }: ProjectPageProps) {
     setProjectDescription(project?.description || "");
   }, [project]);
 
-  if (projectIsLoading) return <div></div>;
+  if (projectIsLoading || !project) return <div></div>;
   return (
     <>
       <Head title={project.name} />

@@ -27,7 +27,7 @@ import { TodoItem } from "./task-card";
 import ReactLoading from "react-loading";
 
 export interface TaskListProps {
-  tasks: (Task & { assignees: User[] })[] | undefined;
+  tasks: (Task & { assignees: User[] })[];
 }
 
 export default function TaskList({ tasks }: TaskListProps) {

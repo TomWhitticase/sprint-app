@@ -1,8 +1,12 @@
-import { Project, Task } from "@prisma/client";
+import { Post, Project, Resource, Task, User } from "@prisma/client";
 import axios from "axios";
 
 export interface ClientProject extends Project {
   tasks: Task[];
+  members: User[];
+  leader: User;
+  posts: Post[];
+  resources: Resource[];
 }
 
 export const apiService = {

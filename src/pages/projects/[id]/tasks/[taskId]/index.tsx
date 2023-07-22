@@ -88,7 +88,7 @@ export default function TaskPage({ id, taskId }: TaskPageProps) {
     }
   };
 
-  if (projectIsLoading || taskIsLoading)
+  if (projectIsLoading || taskIsLoading || !project || !task)
     return (
       <>
         <Head title={"Loading... "} />

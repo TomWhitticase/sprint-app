@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Gantt, ViewMode } from "gantt-task-react";
 import "gantt-task-react/dist/index.css";
 import { Task, User } from "@prisma/client";
@@ -11,40 +11,54 @@ export interface TaskCalendarProps {
   tasks: (Task & { assignees: User[] })[];
 }
 export default function TaskCalendar(props: TaskCalendarProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.Day);
+  const [viewMode, setViewMode] = React.useState<ViewMode>(ViewMode.Day);
 
   const router = useRouter();
-  let columnWidth = 65;
-  const [filteredTasks, setFilteredTasks] = useState(props.tasks);
-  const firstTaskDate = new Date(
-    Math.min.apply(
-      null,
-      props.tasks.map((task) => new Date(task.startDate || "").getTime())
-    )
+
+  const [filteredTasks, setFilteredTasks] = React.useState(props.tasks);
+  const firstTaskDate = React.useMemo(
+    () =>
+      new Date(
+        Math.min.apply(
+          null,
+          props.tasks.map((task) => new Date(task.startDate || "").getTime())
+        )
+      ),
+    [props.tasks]
   );
 
-  const lastTaskDate = new Date(
-    Math.max.apply(
-      null,
-      props.tasks.map((task) => new Date(task.endDate || "").getTime())
-    )
+  const lastTaskDate = React.useMemo(
+    () =>
+      new Date(
+        Math.max.apply(
+          null,
+          props.tasks.map((task) => new Date(task.endDate || "").getTime())
+        )
+      ),
+    [props.tasks]
   );
 
-  const [selectedDates, setSelectedDates] = useState<Date[]>([
+  const [selectedDates, setSelectedDates] = React.useState<Date[]>([
     firstTaskDate,
     lastTaskDate,
   ]);
   const [
     includeCrossesOverDateBoundaries,
     setIncludeCrossesOverDateBoundaries,
-  ] = useState<boolean>(false);
-  if (viewMode === ViewMode.Year) {
-    columnWidth = 350;
-  } else if (viewMode === ViewMode.Month) {
-    columnWidth = 300;
-  } else if (viewMode === ViewMode.Week) {
-    columnWidth = 250;
-  }
+  ] = React.useState<boolean>(false);
+
+  const columnWidth = React.useMemo(() => {
+    switch (viewMode) {
+      case ViewMode.Day:
+        return 65;
+      case ViewMode.Week:
+        return 250;
+      case ViewMode.Month:
+        return 300;
+      case ViewMode.Year:
+        return 350;
+    }
+  }, [viewMode]);
 
   const cycleViewMode = () => {
     switch (viewMode) {
@@ -61,7 +75,7 @@ export default function TaskCalendar(props: TaskCalendarProps) {
   };
 
   // when selected dates change, filter tasks
-  useEffect(() => {
+  React.useEffect(() => {
     if (!props.tasks) return;
     const filtered = props.tasks.filter((task) => {
       if (includeCrossesOverDateBoundaries)

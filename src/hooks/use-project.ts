@@ -1,3 +1,4 @@
+import { ClientProject } from "@/services/apiService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -60,7 +61,7 @@ export function useProject(id: string) {
     data: project,
     isLoading: projectIsLoading,
     error: projectError,
-  } = useQuery(["project", id], () => fetchProject(id));
+  } = useQuery<ClientProject>(["project", id], () => fetchProject(id));
 
   const deleteProjectMutation = useMutation(deleteProjectRequest, {
     onSuccess: (data) => {

@@ -100,11 +100,11 @@ export default function TeamPage({ id }: TeamPageProps) {
 
   return (
     <>
-      <Head title={project.name + " - Team"} />
+      <Head title={project?.name + " - Team"} />
       <ProjectLinkBar
         links={[
           { link: "/projects", text: "Projects" },
-          { link: "/projects/" + id, text: project.name },
+          { link: "/projects/" + id, text: project?.name || "" },
         ]}
         current={"Team"}
       />

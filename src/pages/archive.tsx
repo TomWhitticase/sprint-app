@@ -41,21 +41,14 @@ export default function ArchivePage() {
                   .toLowerCase()
                   .includes(searchQuery.toLowerCase())
             )
-            .map(
-              (
-                project: Project & {
-                  leader: User;
-                  members: User[];
-                }
-              ) => (
-                <div
-                  key={project.id}
-                  className="p-2 desktop-only:w-1/2 mobile-only:w-full"
-                >
-                  <ProjectCard project={project} />
-                </div>
-              )
-            )}
+            .map((project) => (
+              <div
+                key={project.id}
+                className="p-2 desktop-only:w-1/2 mobile-only:w-full"
+              >
+                <ProjectCard project={project} />
+              </div>
+            ))}
         </div>
       </main>
     </>

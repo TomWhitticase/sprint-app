@@ -1,4 +1,3 @@
-import { Project, User } from "@prisma/client";
 import { useRouter } from "next/router";
 import React from "react";
 import UserAvatar from "../users/user-avatar";
@@ -6,9 +5,10 @@ import UserAvatarGroup from "../users/user-avatar-group";
 import { Progress, Text } from "@chakra-ui/react";
 import { FaTasks, FaFileAlt } from "react-icons/fa";
 import { IoMdChatboxes } from "react-icons/io";
+import { ClientProject } from "@/services/apiService";
 
 export interface ProjectCardProps {
-  project: any;
+  project: ClientProject;
   onClick?: () => void;
 }
 export default function ProjectCard({ project, onClick }: ProjectCardProps) {
@@ -22,13 +22,17 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
     }
   };
 
-  const projectProgress =
-    (project.tasks.filter(({ status }) => status === "COMPLETED").length /
-      project.tasks.length) *
-      100 || 0;
-  const completedCount = project.tasks.filter(
-    ({ status }) => status === "COMPLETED"
-  ).length;
+  const projectProgress = React.useMemo(
+    () =>
+      (project.tasks.filter(({ status }) => status === "COMPLETED").length /
+        project.tasks.length) *
+        100 || 0,
+    [project]
+  );
+  const completedCount = React.useMemo(
+    () => project.tasks.filter(({ status }) => status === "COMPLETED").length,
+    [project]
+  );
 
   return (
     <div

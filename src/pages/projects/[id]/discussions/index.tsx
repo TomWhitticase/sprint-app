@@ -29,7 +29,7 @@ export default function DiscussionsPage({ id }: DiscussionsPageProps) {
     );
   };
 
-  if (projectIsLoading)
+  if (projectIsLoading || !project)
     return (
       <div>
         <ReactLoading type={"bubbles"} color={"#333"} height={50} width={50} />
