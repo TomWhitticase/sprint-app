@@ -1,4 +1,3 @@
-import { Project } from "@prisma/client";
 import { useRouter } from "next/router";
 import React, { use, useMemo } from "react";
 import { FaChevronDown, FaFileAlt, FaTasks, FaUsers } from "react-icons/fa";

@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Task } from "@prisma/client";
-import { RangeDatepicker } from "chakra-dayzed-datepicker";
+import DateRangeInput from "../tasks/date-range-input";
 
 export interface TasksLineChartProps {
   tasks: Task[] | undefined;
@@ -77,10 +77,7 @@ export default function TasksLineChart({ tasks }: TasksLineChartProps) {
       <div className="flex items-start justify-between">
         <h1 className="text-lg font-bold">Task Timeline</h1>
         <div className="">
-          <RangeDatepicker
-            configs={{
-              dateFormat: "dd/MM/yyyy",
-            }}
+          <DateRangeInput
             selectedDates={selectedDates}
             onDateChange={setSelectedDates}
           />

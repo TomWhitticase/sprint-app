@@ -7,7 +7,6 @@ import ReactLoading from "react-loading";
 import { FaRegSquare } from "react-icons/fa";
 import { FaCheckSquare } from "react-icons/fa";
 import { useInvites } from "@/hooks/use-invites";
-import { promises } from "dns";
 import { useProject } from "@/hooks/use-project";
 
 export type InviteUsersProps = {

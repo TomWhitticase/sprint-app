@@ -13,9 +13,9 @@ import { UseMutateAsyncFunction } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { Project, User } from "@prisma/client";
 import SelectUsers from "../users/select-users";
-import { RangeDatepicker } from "chakra-dayzed-datepicker";
 import { useRouter } from "next/router";
 import { TbFlagFilled } from "react-icons/tb";
+import DateRangeInput from "./date-range-input";
 
 interface NewTaskProps {
   createTask: UseMutateAsyncFunction<any, unknown, NewTaskInputs, unknown>;
@@ -196,10 +196,7 @@ export default function NewTask({ createTask, project }: NewTaskProps) {
 
           <FormControl>
             <FormLabel>Start and End Date</FormLabel>
-            <RangeDatepicker
-              configs={{
-                dateFormat: "dd/MM/yyyy",
-              }}
+            <DateRangeInput
               selectedDates={selectedDates}
               onDateChange={setSelectedDates}
             />

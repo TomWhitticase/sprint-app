@@ -15,6 +15,7 @@ import ReactLoading from "react-loading";
 import ProjectNavItem from "./project-nav-item";
 import { useInvites } from "@/hooks/use-invites";
 import { Image } from "@chakra-ui/react";
+import { ClientProject } from "@/services/apiService";
 
 export default function Sidebar() {
   const router = useRouter();
@@ -71,7 +72,7 @@ export default function Sidebar() {
                   width={50}
                 />
               ) : (
-                projects.map((project: any) => (
+                projects?.map((project: ClientProject) => (
                   <ProjectNavItem
                     key={project.id}
                     id={project.id}

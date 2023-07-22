@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Gantt, ViewMode, DisplayOption } from "gantt-task-react";
+import { Gantt, ViewMode } from "gantt-task-react";
 import "gantt-task-react/dist/index.css";
 import { Task, User } from "@prisma/client";
 import { Button, Checkbox } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { TodoItem } from "./task-card";
-import { RangeDatepicker } from "chakra-dayzed-datepicker";
 import DateRangeInput from "./date-range-input";
 
 export interface TaskCalendarProps {
@@ -20,13 +19,14 @@ export default function TaskCalendar(props: TaskCalendarProps) {
   const firstTaskDate = new Date(
     Math.min.apply(
       null,
-      props.tasks.map((task) => new Date(task.startDate))
+      props.tasks.map((task) => new Date(task.startDate || "").getTime())
     )
   );
+
   const lastTaskDate = new Date(
     Math.max.apply(
       null,
-      props.tasks.map((task) => new Date(task.endDate))
+      props.tasks.map((task) => new Date(task.endDate || "").getTime())
     )
   );
 

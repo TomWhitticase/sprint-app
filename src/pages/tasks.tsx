@@ -15,13 +15,13 @@ import {
   Select,
   Tooltip,
 } from "@chakra-ui/react";
-import { Project } from "@prisma/client";
 import { useRouter } from "next/router";
 import { FiCalendar, FiGrid, FiList } from "react-icons/fi";
 import TaskCalendar from "@/components/tasks/task-calendar";
 import KanbanBoard from "@/components/tasks/kanban-board";
 import ReactLoading from "react-loading";
 import Link from "next/link";
+import { ClientProject } from "@/services/apiService";
 
 export default function TasksPage() {
   const { tasks, tasksIsLoading, updateTask } = useTasks(undefined, true);
@@ -91,7 +91,7 @@ export default function TasksPage() {
                 placeholder="Tasks from all my projects"
                 onChange={(e) => setSelectedProject(e.target.value)}
               >
-                {projects.map((project: Project) => (
+                {projects.map((project: ClientProject) => (
                   <option key={project.id} value={project.id}>
                     {project.name}
                   </option>
@@ -107,7 +107,7 @@ export default function TasksPage() {
                   Select a project to create a task for
                 </PopoverHeader>
                 <PopoverBody>
-                  {projects?.map((project: Project) => (
+                  {projects?.map((project: ClientProject) => (
                     <Button
                       key={project.id}
                       variant={"ghost"}
@@ -118,7 +118,7 @@ export default function TasksPage() {
                       {project.name}
                     </Button>
                   ))}
-                  {!projects?.length > 0 && (
+                  {projects!.length > 0 && (
                     <>
                       <div className="p-2">
                         {" "}

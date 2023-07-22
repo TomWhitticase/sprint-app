@@ -1,3 +1,4 @@
+import { apiService } from "@/services/apiService";
 import { Project, Task } from "@prisma/client";
 import {
   UseMutateFunction,
@@ -7,20 +8,6 @@ import {
 } from "@tanstack/react-query";
 import axios from "axios";
 import { ar } from "date-fns/locale";
-
-// Fetch Projects
-async function fetchProjects(role?: "leader" | "member", archived?: boolean) {
-  if (archived) {
-    const { data } = await axios.get(`/api/projects/archived`, {
-      withCredentials: true,
-    });
-    return data;
-  }
-  const { data } = await axios.get(`/api/projects?role=${role}`, {
-    withCredentials: true,
-  });
-  return data;
-}
 
 // Create Project
 export interface CreateProjectInput {
@@ -44,7 +31,8 @@ export function useProjects(role?: "leader" | "member", archived?: boolean) {
     isLoading: projectsIsLoading,
     error: projectsError,
   } = useQuery(["projects", role, archived], () =>
-    fetchProjects(role, archived)
+    // fetchProjects(role, archived)
+    apiService.projects.getProjects({ role, archived })
   );
 
   const createProjectMutation = useMutation(createProjectRequest, {
